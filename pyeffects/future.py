@@ -1,6 +1,6 @@
-from monad import Monad
-from option import empty, Some
-from either import Either, Left, Right
+from pyeffects.monad import Monad
+from pyeffects.option import empty, Some
+from pyeffects.either import Either, Left, Right
 from functools import reduce
 import threading
 

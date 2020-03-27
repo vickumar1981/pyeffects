@@ -1,0 +1,22 @@
+[[source]]
+url = "https://pypi.org/simple/"
+verify_ssl = true
+name = "pypi"
+
+[dev-packages]
+alabaster = "*"
+codecov = "*"
+docutils = "*"
+detox = "*"
+"flake8" = "*"
+pytest = ">=2.8.0,<=3.10.1"
+pytest-httpbin = ">=0.0.7,<1.0"
+pytest-mock = "*"
+pytest-cov = "*"
+pytest-xdist = "<=1.25"
+readme-renderer = "*"
+sphinx = "<=1.5.5"
+tox = "*"
+
+[packages]
+"pyeffects" = {path = ".", editable = true}

@@ -1,4 +1,4 @@
-from monad import Monad
+from pyeffects.monad import Monad
 
 
 class Either(Monad):
