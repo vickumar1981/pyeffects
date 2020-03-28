@@ -1,24 +1,24 @@
-from pyeffects.monad import Monad
+from .monad import Monad
 
 
 class Try(Monad):
     @staticmethod
-    def of(f):
+    def of(func):
         try:
-            value = f()
+            value = func()
             Success(value)
         except Exception as err:
             Failure(err)
 
-    def flat_map(self, f):
+    def flat_map(self, func):
         if self.is_success():
-            return f(self.value)
+            return func(self.value)
         else:
             return self
 
-    def recover(self, err, cb):
+    def recover(self, err, callback):
         if self.is_failure() and isinstance(self.value, err):
-            return cb()
+            return callback()
         else:
             return self
 

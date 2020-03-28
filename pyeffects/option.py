@@ -1,14 +1,14 @@
-from pyeffects.monad import Monad
+from .monad import Monad
 
 
 class Option(Monad):
     @staticmethod
-    def of(x):
-        return Some(x)
+    def of(value):
+        return Empty() if value is None else Some(value)
 
-    def flat_map(self, f):
+    def flat_map(self, func):
         if self.is_defined():
-            return f(self.value)
+            return func(self.value)
         else:
             return empty
 

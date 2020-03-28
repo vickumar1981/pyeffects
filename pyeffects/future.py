@@ -1,42 +1,42 @@
-from pyeffects.monad import Monad
-from pyeffects.option import empty, Some
-from pyeffects.either import Either, Left, Right
+from .monad import Monad
+from .option import empty, Some
+from .either import Either, Left, Right
 from functools import reduce
 import threading
 
 
 class Future(Monad):
-    def __init__(self, f):
+    def __init__(self, func):
         self.subscribers = []
         self.cache = empty
         self.semaphore = threading.BoundedSemaphore(1)
-        f(self.callback)
+        func(self.callback)
 
     @staticmethod
     def of(value):
-        return Future(lambda cb: cb(Either.of(value)))
+        return Future(lambda callback: callback(Either.of(value)))
 
     @staticmethod
-    def exec(f, cb):
+    def exec(function, callback):
         try:
-            data = f()
-            cb(Right(data))
+            data = function()
+            callback(Right(data))
         except Exception as err:
-            cb(Left(err))
+            callback(Left(err))
 
     @staticmethod
-    def exec_on_thread(f, cb):
-        t = threading.Thread(target=Future.exec, args=[f, cb])
-        t.start()
+    def exec_on_thread(func, callback):
+        thread = threading.Thread(target=Future.exec, args=[func, callback])
+        thread.start()
 
     @staticmethod
     def run_async(f):
-        return Future(lambda cb: Future.exec_on_thread(f, cb))
+        return Future(lambda callback: Future.exec_on_thread(f, callback))
 
-    def flat_map(self, f):
+    def flat_map(self, func):
         return Future(
-            lambda cb: self.subscribe(
-                lambda value: f(value.value).subscribe(cb) if value.biased else cb(value)
+            lambda callback: self.subscribe(
+                lambda value: func(value.value).subscribe(callback) if value.biased else callback(value)
             )
         )
 

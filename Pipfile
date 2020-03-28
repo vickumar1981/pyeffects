@@ -1,22 +1,23 @@
 [[source]]
-url = "https://pypi.org/simple/"
-verify_ssl = true
 name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
 
 [dev-packages]
 alabaster = "*"
 codecov = "*"
 docutils = "*"
 detox = "*"
-"flake8" = "*"
-pytest = ">=2.8.0,<=3.10.1"
-pytest-httpbin = ">=0.0.7,<1.0"
+flake8 = "*"
+pytest = "*"
 pytest-mock = "*"
 pytest-cov = "*"
-pytest-xdist = "<=1.25"
+pytest-xdist = "*"
 readme-renderer = "*"
-sphinx = "<=1.5.5"
+sphinx = "*"
 tox = "*"
 
 [packages]
-"pyeffects" = {path = ".", editable = true}
+
+[requires]
+python_version = "3.6"
