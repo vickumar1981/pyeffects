@@ -1,3 +1,11 @@
+# -*- coding: utf-8 -*-
+
+"""
+pyeffects.Future
+~~~~~~~~~~~~----
+
+This module implements the Future class.
+"""
 from .Monad import Monad
 from .Option import empty, Some
 from .Try import Success, Failure
@@ -16,6 +24,19 @@ class Future(Monad):
 
     @staticmethod
     def of(value):
+        """Constructs an immediate :class:`Future <Future>`.
+
+        :param value: value of the new :class:`Future` object.
+        :rtype: pyEffects.Future
+
+        Usage::
+
+          >>> from pyeffects.Future import *
+          >>> Future.of(5)
+          Future(Success(5))
+          >>> Future.of("abc")
+          Future(Success(abc))
+        """
         return Future(lambda cb: cb(Success(value)))
 
     @staticmethod
@@ -32,13 +53,40 @@ class Future(Monad):
         thread.start()
 
     @staticmethod
-    def run(f):
-        return Future(lambda cb: Future._run_on_thread(f, cb))
+    def run(func):
+        """Constructs a :class:`Future <Future>` that runs asynchronously on another thread.
+
+        :param func: function to run on new thread and return a new :class:`Future` object
+        :rtype: pyEffects.Future
+
+        Usage::
+
+          >>> import time
+          >>> from pyeffects.Future import *
+          >>> def get_value():
+          ...   time.sleep(1)
+          ...   return "abc"
+          ...
+          >>> Future.run(get_value)
+          Future(None)
+        """
+        return Future(lambda cb: Future._run_on_thread(func, cb))
 
     def flat_map(self, func):
+        """Flatmaps a function for :class:`Future <Future>`.
+
+        :param func: function returning a pyEffects.Future to apply to flat_map.
+        :rtype: pyEffects.Future
+
+        Usage::
+
+          >>> from pyeffects.Future import *
+          >>> Future.of(5).flat_map(lambda v: Future.of(v * v))
+          Future(Success(25))
+        """
         return Future(
-            lambda cb: self.subscribe(
-                lambda value: cb(value) if value.is_failure() else func(value.value).subscribe(cb)
+            lambda cb: self.on_complete(
+                lambda value: cb(value) if value.is_failure() else func(value.value).on_complete(cb)
             )
         )
 
@@ -61,7 +109,20 @@ class Future(Monad):
             t.start()
         self.semaphore.release()
 
-    def subscribe(self, subscriber):
+    def on_complete(self, subscriber):
+        """Calls a subscriber function when :class:`Future <Future>` completes.
+
+        :param subscriber: function to call when :class:`Future` completes.
+
+        Usage::
+
+          >>> from pyeffects.Future import *
+          >>> val = Future.of(5).flat_map(lambda v: Future.of(v * v))
+          >>> val
+          Future(Success(25))
+          >>> val.on_complete(lambda v: print(v))
+          Success(25)
+        """
         self.semaphore.acquire()
         if self.cache.is_defined():
             self.semaphore.release()

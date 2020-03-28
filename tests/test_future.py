@@ -18,15 +18,15 @@ class TestOption:
         value = random_int()
         assert Future.of(value).get().get() == value
 
-    def test_option_right_identity(self):
+    def test_future_right_identity(self):
         value = random_int()
         assert Future.of(value).flat_map(lambda v: Future.of(v)).get().get() == value
 
-    def test_option_left_identity(self):
+    def test_future_left_identity(self):
         value = random_int()
         assert Future.of(value).flat_map(self._sq_int).get().get() == self._sq_int(value).get().get()
 
-    def test_option_associativity(self):
+    def test_future_associativity(self):
         value = random_int()
         value1 = Future.of(value).flat_map(lambda v1: self._sq_int(v1).flat_map(lambda v2: self._dbl_int(v2)))
         value2 = Future.of(value).flat_map(self._sq_int).flat_map(self._dbl_int)

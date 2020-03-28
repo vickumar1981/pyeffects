@@ -46,7 +46,7 @@ Handle your side-effects in Python like a boss.  Implements functional types for
    >>> val = Future.of(5).map(lambda v: v * v)
    >>> val
    Future(Success(25))
-   >>> val.subscribe(lambda v: print(v))
+   >>> val.on_complete(lambda v: print(v))
    Success(25)
    >>> val.get().get()
    25

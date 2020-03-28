@@ -1,21 +1,75 @@
+# -*- coding: utf-8 -*-
+
+"""
+pyeffects.Either
+~~~~~~~~~~~~----
+
+This module implements the Either, Left, and Right classes.
+"""
 from .Monad import Monad
 
 
 class Either(Monad):
     @staticmethod
     def of(value):
+        """Constructs a :class:`Either <Either>`.
+
+        :param value: value of the new :class:`Either` object.
+        :rtype: pyEffects.Either
+
+        Usage::
+
+          >>> from pyeffects.Either import *
+          >>> Either.of(5)
+          Right(5)
+          >>> Right("abc")
+          Right(abc)
+          >>> Left(2.5)
+          Left(2.5)
+        """
         return Right(value)
 
     def flat_map(self, f):
+        """Flatmaps a function for :class:`Either <Either>`.
+
+        :param func: function returning a pyEffects.Either to apply to flat_map.
+        :rtype: pyEffects.Either
+
+        Usage::
+
+          >>> from pyeffects.Either import *
+          >>> Either.of(5).flat_map(lambda v: Right(v * v))
+          Right(25)
+        """
         if self.is_right():
             return f(self.value)
         else:
             return self
 
     def is_right(self):
+        """Returns if the :class:`Either <Either>` is a right projection.
+
+        :rtype: bool
+
+        Usage::
+
+          >>> from pyeffects.Either import *
+          >>> Right(5).is_right()
+          True
+        """
         return self.biased
 
     def is_left(self):
+        """Returns if the :class:`Either <Either>` is a left projection.
+
+        :rtype: bool
+
+        Usage::
+
+          >>> from pyeffects.Either import *
+          >>> Right(5).is_left()
+          False
+        """
         return not self.is_right()
 
 
