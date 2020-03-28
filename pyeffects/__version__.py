@@ -1,0 +1,9 @@
+__title__ = 'pyeffects'
+__description__ = 'Monads for Python.  Side-effect explicitly.'
+__url__ = 'https://github.com/vickumar1981/pyeffects'
+__version__ = '1.00.0'
+__build__ = 0x010000
+__author__ = 'Vic Kumar'
+__author_email__ = 'vickumar@gmail.com'
+__license__ = 'Apache 2.0'
+__copyright__ = 'Copyright 2020 Vic Kumar'
