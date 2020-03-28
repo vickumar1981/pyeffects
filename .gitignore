@@ -1,4 +1,5 @@
 .idea/
+pyeffects.egg-info/
 .coverage
 MANIFEST
 coverage.xml

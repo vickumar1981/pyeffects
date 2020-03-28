@@ -17,7 +17,7 @@ class Future(Monad):
         return Future(lambda callback: callback(Either.of(value)))
 
     @staticmethod
-    def exec(function, callback):
+    def run(function, callback):
         try:
             data = function()
             callback(Right(data))
@@ -25,13 +25,13 @@ class Future(Monad):
             callback(Left(err))
 
     @staticmethod
-    def exec_on_thread(func, callback):
-        thread = threading.Thread(target=Future.exec, args=[func, callback])
+    def run_on_thread(func, callback):
+        thread = threading.Thread(target=Future.run, args=[func, callback])
         thread.start()
 
     @staticmethod
     def run_async(f):
-        return Future(lambda callback: Future.exec_on_thread(f, callback))
+        return Future(lambda callback: Future.run_on_thread(f, callback))
 
     def flat_map(self, func):
         return Future(

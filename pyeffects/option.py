@@ -4,7 +4,7 @@ from .monad import Monad
 class Option(Monad):
     @staticmethod
     def of(value):
-        return Empty() if value is None else Some(value)
+        return empty if value is None else Some(value)
 
     def flat_map(self, func):
         if self.is_defined():
