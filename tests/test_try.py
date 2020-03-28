@@ -24,12 +24,13 @@ class TestOption:
     def test_recover_from_failed_try_is_success(self):
         value = random_int()
         failed_try = Try.of(self._fail_try)
-        assert failed_try.recover(RuntimeError, value) == value
+        recovered_try = failed_try.recover(RuntimeError, lambda: value)
+        assert recovered_try.is_success() and recovered_try.get() == value
 
     def test_recover_from_failed_try_depends_on_error(self):
         value = random_int()
         failed_try = Try.of(self._fail_try)
-        assert failed_try.recover(AssertionError, value).is_failure()
+        assert failed_try.recover(AssertionError, lambda: value).is_failure()
 
     def test_try_right_identity(self):
         value = random_int()

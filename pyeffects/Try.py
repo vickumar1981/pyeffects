@@ -19,9 +19,9 @@ class Try(Monad):
         else:
             return self
 
-    def recover(self, err, value):
+    def recover(self, err, recover):
         if self.is_failure() and isinstance(self.value, err):
-            return value
+            return Try.of(recover)
         else:
             return self
 
