@@ -69,3 +69,6 @@ class Future(Monad):
         else:
             self.subscribers.append(subscriber)
             self.semaphore.release()
+
+    def __repr__(self):
+        return 'Future(' + str(self.value) + ')'

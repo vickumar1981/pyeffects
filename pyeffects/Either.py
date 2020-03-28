@@ -24,8 +24,14 @@ class Left(Either):
         self.value = value
         self.biased = False
 
+    def __repr__(self):
+        return 'Left(' + str(self.value) + ')'
+
 
 class Right(Either):
     def __init__(self, value):
         self.value = value
         self.biased = True
+
+    def __repr__(self):
+        return 'Right(' + str(self.value) + ')'

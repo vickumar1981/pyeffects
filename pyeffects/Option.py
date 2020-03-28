@@ -24,6 +24,9 @@ class Some(Option):
         self.value = value
         self.biased = True
 
+    def __repr__(self):
+        return 'Some(' + str(self.value) + ')'
+
 
 class Empty(Option):
     def __init__(self):

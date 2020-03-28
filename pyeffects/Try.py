@@ -41,8 +41,14 @@ class Failure(Try):
         self.value = value
         self.biased = False
 
+    def __repr__(self):
+        return 'Failure(' + str(self.value) + ')'
+
 
 class Success(Try):
     def __init__(self, value):
         self.value = value
         self.biased = True
+
+    def __repr__(self):
+        return 'Success(' + str(self.value) + ')'
