@@ -1,6 +1,6 @@
 from .Monad import Monad
 from .Option import empty, Some
-from .Either import Either, Left, Right
+from .Try import Success, Failure
 from functools import reduce
 import threading
 
@@ -10,33 +10,35 @@ class Future(Monad):
         self.subscribers = []
         self.cache = empty
         self.semaphore = threading.BoundedSemaphore(1)
+        self.biased = True
+        self.value = None
         func(self.callback)
 
     @staticmethod
     def of(value):
-        return Future(lambda callback: callback(Either.of(value)))
+        return Future(lambda cb: cb(Success(value)))
 
     @staticmethod
-    def run(function, callback):
+    def _exec(func, cb):
         try:
-            data = function()
-            callback(Right(data))
+            data = func()
+            cb(Success(data))
         except Exception as err:
-            callback(Left(err))
+            cb(Failure(err))
 
     @staticmethod
-    def run_on_thread(func, callback):
-        thread = threading.Thread(target=Future.run, args=[func, callback])
+    def _run_on_thread(func, cb):
+        thread = threading.Thread(target=Future._exec, args=[func, cb])
         thread.start()
 
     @staticmethod
-    def run_async(f):
-        return Future(lambda callback: Future.run_on_thread(f, callback))
+    def run(f):
+        return Future(lambda cb: Future._run_on_thread(f, cb))
 
     def flat_map(self, func):
         return Future(
-            lambda callback: self.subscribe(
-                lambda value: func(value.value).subscribe(callback) if value.biased else callback(value)
+            lambda cb: self.subscribe(
+                lambda value: cb(value) if value.is_failure() else func(value.value).subscribe(cb)
             )
         )
 
@@ -50,6 +52,7 @@ class Future(Monad):
             ), arr, Future.of([]))
 
     def callback(self, value):
+        self.value = value
         self.semaphore.acquire()
         self.cache = Some(value)
         while len(self.subscribers) > 0:
@@ -60,7 +63,7 @@ class Future(Monad):
 
     def subscribe(self, subscriber):
         self.semaphore.acquire()
-        if self.cache.defined:
+        if self.cache.is_defined():
             self.semaphore.release()
             subscriber(self.cache.value)
         else:
