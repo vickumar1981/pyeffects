@@ -14,19 +14,19 @@ class Monad:
             return self.value
         raise TypeError("get() cannot be called on this class")
 
-    def or_else(self, v):
+    def get_or_else(self, v):
         if self.biased:
             return self.value
         else:
             return v
 
-    def or_else_get(self, f):
+    def or_else_supply(self, f):
         if self.biased:
             return self.value
         else:
             return f()
 
-    def __or__(self, other):
+    def or_else(self, other):
         if self.biased:
             return self
         else:
