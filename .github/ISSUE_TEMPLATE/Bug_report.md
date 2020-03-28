@@ -17,7 +17,7 @@ What happened instead.
 ## Reproduction Steps
 
 ```python
-from pyeffects.option import Option
+import pyeffects.Option.*
 
 ```
 

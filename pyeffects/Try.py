@@ -1,4 +1,4 @@
-from .monad import Monad
+from .Monad import Monad
 
 
 class Try(Monad):
@@ -6,9 +6,9 @@ class Try(Monad):
     def of(func):
         try:
             value = func()
-            Success(value)
+            return Success(value)
         except Exception as err:
-            Failure(err)
+            return Failure(err)
 
     def flat_map(self, func):
         if self.is_success():
@@ -16,9 +16,9 @@ class Try(Monad):
         else:
             return self
 
-    def recover(self, err, callback):
+    def recover(self, err, value):
         if self.is_failure() and isinstance(self.value, err):
-            return callback()
+            return value
         else:
             return self
 

@@ -12,6 +12,7 @@ class Monad:
     def get(self):
         if self.biased:
             return self.value
+        raise TypeError("get() cannot be called on this class")
 
     def or_else(self, v):
         if self.biased:
@@ -30,3 +31,7 @@ class Monad:
             return self
         else:
             return other
+
+
+def identity(value):
+    return value

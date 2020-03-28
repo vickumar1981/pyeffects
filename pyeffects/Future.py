@@ -1,6 +1,6 @@
-from .monad import Monad
-from .option import empty, Some
-from .either import Either, Left, Right
+from .Monad import Monad
+from .Option import empty, Some
+from .Either import Either, Left, Right
 from functools import reduce
 import threading
 
