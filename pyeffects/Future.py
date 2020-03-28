@@ -12,7 +12,7 @@ class Future(Monad):
         self.semaphore = threading.BoundedSemaphore(1)
         self.biased = True
         self.value = None
-        func(self.callback)
+        func(self._callback)
 
     @staticmethod
     def of(value):
@@ -51,7 +51,7 @@ class Future(Monad):
                 )
             ), arr, Future.of([]))
 
-    def callback(self, value):
+    def _callback(self, value):
         self.value = value
         self.semaphore.acquire()
         self.cache = Some(value)
