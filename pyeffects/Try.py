@@ -10,6 +10,9 @@ class Try(Monad):
         except Exception as err:
             return Failure(err)
 
+    def map(self, f):
+        return self.flat_map(lambda x: self.of(lambda: f(x)))
+
     def flat_map(self, func):
         if self.is_success():
             return func(self.value)

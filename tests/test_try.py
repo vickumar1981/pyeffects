@@ -45,5 +45,9 @@ class TestOption:
         value2 = Try.of(lambda: value).flat_map(self._sq_int).flat_map(self._dbl_int)
         assert value1.get() == value2.get()
 
+    def test_try_map_function(self):
+        value = random_int()
+        assert Try.of(lambda: value).map(lambda v: v + v).get() == value * 2
+
     def test_failed_try_flat_maps_to_failure(self):
         assert Try.of(self._fail_try).flat_map(self._dbl_int).is_failure()
