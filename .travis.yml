@@ -9,8 +9,6 @@ cache: pip
 jobs:
   include:
     - stage: test
-      python: '2.7'
-    - stage: test
       python: '3.6' 
     - stage: coverage
       python: '3.6'
