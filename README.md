@@ -24,7 +24,7 @@ Handle your side-effects in Python like a boss.  Implements functional types for
 ---
 ### 6. Reporting an Issue
 
-Please report any issues or bugs to the [Github issues page](https://github.com/vickumar1981/stringdistance/issues). 
+Please report any issues or bugs to the [Github issues page](https://github.com/vickumar1981/pyeffects/issues). 
 
 ---
 ### 8. License
