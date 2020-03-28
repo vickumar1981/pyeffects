@@ -1,5 +1,6 @@
 .idea/
 pyeffects.egg-info/
+htmlcov/
 .coverage
 MANIFEST
 coverage.xml
