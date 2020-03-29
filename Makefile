@@ -15,7 +15,11 @@ flake8:
 	pipenv run flake8 --ignore=E501,F401,E128,E402,E731,F821 pyeffects
 
 coverage:
+	pipenv run py.test --cov-config .coveragerc --verbose --cov-report term --cov-report xml --cov=pyeffects tests
+
+coverhtml:
 	pipenv run py.test --cov-config .coveragerc --verbose --cov-report term --cov-report html --cov=pyeffects tests
+
 
 publish:
 	pip install 'twine>=1.5.0'
@@ -28,4 +32,4 @@ docs:
 	@echo "\033[95m\n\nBuild successful! View the docs homepage at docs/_build/html/index.html.\n\033[0m"
 
 clean:
-	rm -Rf .coverage htmlcov/ .tox .pytest_cache/ .eggs/ pyeffects.egg-info/
+	rm -Rf .coverage htmlcov/ .tox .pytest_cache/ .eggs/ pyeffects.egg-info/ build/ dist/
