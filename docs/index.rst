@@ -7,6 +7,17 @@ Handle your side-effects in Python like a boss.  Implements functional types for
 
 ----------------
 
+.. toctree::
+   :maxdepth: 2
+
+   monads
+   options
+   try
+   either
+   future
+
+----------------
+
 **Using Option**::
 
    >>> from pyeffects.Option import *

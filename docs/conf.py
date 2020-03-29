@@ -39,7 +39,7 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.intersphinx",
     "sphinx.ext.todo",
-    "sphinx.ext.viewcode",
+    "sphinx.ext.viewcode"
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -128,6 +128,8 @@ html_theme_options = {
     "github_banner": True,
     "show_related": False,
     "note_bg": "#FFF59C",
+    'logo': 'logo.jpg',
+    "description": "Monads for Python.  Side-effect explicitly."
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
@@ -169,8 +171,14 @@ html_use_smartypants = False
 
 # Custom sidebar templates, maps document names to template names.
 html_sidebars = {
-    "index": [],
-    "**": [],
+    '**': [
+        'about.html',
+        "localtoc.html",
+        'navigation.html',
+        'relations.html',
+        'searchbox.html',
+        'sourcelink.html'
+    ]
 }
 
 # Additional templates that should be rendered to pages, maps page names to
