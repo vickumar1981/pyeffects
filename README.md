@@ -2,6 +2,8 @@
 
 # pyEffects  
 
+[![Build Status](https://api.travis-ci.org/vickumar1981/pyeffects.svg?branch=master)](https://travis-ci.org/vickumar1981/pyeffects/builds) [![PyPI version](https://badge.fury.io/py/pyeffects.svg)](https://badge.fury.io/py/pyeffects) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/vickumar1981/pyeffects/blob/master/LICENSE)
+
 Monads for Python.  Side-effect explicitly.
 
 Handle your side-effects in Python like a boss.  Implements functional types for Either, Option, Try, and Future.
