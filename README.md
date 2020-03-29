@@ -73,4 +73,4 @@ Please report any issues or bugs to the [Github issues page](https://github.com/
 ---
 ### 8. License
 
-This project is licensed under the [Apache 2 License](LICENSE.md).
+This project is licensed under the [Apache 2 License](https://github.com/vickumar1981/pyeffects/blob/master/LICENSE).
