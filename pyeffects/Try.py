@@ -30,6 +30,8 @@ class Try(Monad):
           >>> Try.of(error)
           Failure(failed)
         """
+        if not hasattr(func, "__call__"):
+            raise TypeError("Try.of expects a callable")
         try:
             value = func()
             return Success(value)
@@ -62,6 +64,8 @@ class Try(Monad):
           >>> Success(5).flat_map(lambda v: Success(v * v))
           Success(25)
         """
+        if not hasattr(func, "__call__"):
+            raise TypeError("Try.flat_map expects a callable")
         if self.is_success():
             return func(self.value)
         else:

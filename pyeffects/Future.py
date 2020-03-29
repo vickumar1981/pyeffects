@@ -84,6 +84,8 @@ class Future(Monad):
           >>> Future.of(5).flat_map(lambda v: Future.of(v * v))
           Future(Success(25))
         """
+        if not hasattr(func, "__call__"):
+            raise TypeError("Future.flat_map expects a callable")
         return Future(
             lambda cb: self.on_complete(
                 lambda value: cb(value) if value.is_failure() else func(value.value).on_complete(cb)

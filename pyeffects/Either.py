@@ -29,7 +29,7 @@ class Either(Monad):
         """
         return Right(value)
 
-    def flat_map(self, f):
+    def flat_map(self, func):
         """Flatmaps a function for :class:`Either <Either>`.
 
         :param func: function returning a pyEffects.Either to apply to flat_map.
@@ -41,8 +41,10 @@ class Either(Monad):
           >>> Either.of(5).flat_map(lambda v: Right(v * v))
           Right(25)
         """
+        if not hasattr(func, "__call__"):
+            raise TypeError("Either.flat_map expects a callable")
         if self.is_right():
-            return f(self.value)
+            return func(self.value)
         else:
             return self
 

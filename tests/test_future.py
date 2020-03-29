@@ -1,4 +1,5 @@
 from pyeffects.Future import *
+from pyeffects.Try import Try
 from .random_int_generator import random_int
 
 
@@ -34,3 +35,10 @@ class TestOption:
 
     def test_failed_future_flat_maps_to_failure(self):
         assert Future.run(self._fail_future).flat_map(lambda v: Future.of(v)).get().is_failure()
+
+    def test_future_flat_map_requires_callable(self):
+        result = Try.of(lambda: Future.of(random_int()).flat_map(random_int()))
+        assert result.is_failure() and isinstance(result.error(), TypeError)
+
+    def test_future_repr(self):
+        assert str(Future.of(random_int())).startswith("Future")

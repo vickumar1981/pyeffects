@@ -41,6 +41,8 @@ class Option(Monad):
           >>> Some(5).flat_map(lambda v: Some(v * v))
           Some(25)
         """
+        if not hasattr(func, "__call__"):
+            raise TypeError("Option.flat_map expects a callable")
         if self.is_defined():
             return func(self.value)
         else:

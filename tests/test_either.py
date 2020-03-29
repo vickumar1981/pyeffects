@@ -1,5 +1,6 @@
 from pyeffects.Either import *
 from pyeffects.Monad import identity
+from pyeffects.Try import Try
 from .random_int_generator import random_int
 
 
@@ -39,3 +40,11 @@ class TestEither:
 
     def test_left_either_flat_maps_is_left(self):
         assert Left(random_int()).flat_map(lambda v: Right(v)).is_left()
+
+    def test_either_flat_map_requires_callable(self):
+        result = Try.of(lambda: Right(random_int()).flat_map(random_int()))
+        assert result.is_failure() and isinstance(result.error(), TypeError)
+
+    def test_either_repr(self):
+        assert str(Right(random_int())).startswith("Right")
+        assert str(Left(random_int())).startswith("Left")

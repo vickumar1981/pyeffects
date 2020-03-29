@@ -1,5 +1,6 @@
 from pyeffects.Option import *
 from pyeffects.Monad import identity
+from pyeffects.Try import Try
 from .random_int_generator import random_int
 
 
@@ -32,3 +33,11 @@ class TestOption:
 
     def test_empty_option_flat_maps_to_empty(self):
         assert empty.flat_map(lambda v: Option.of(v)).is_empty()
+
+    def test_option_flat_map_requires_callable(self):
+        result = Try.of(lambda: Some(random_int()).flat_map(random_int()))
+        assert result.is_failure() and isinstance(result.error(), TypeError)
+
+    def test_option_repr(self):
+        assert str(Some(random_int())).startswith("Some")
+        assert str(empty).startswith("Empty")

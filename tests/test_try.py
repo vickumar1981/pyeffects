@@ -52,3 +52,15 @@ class TestOption:
 
     def test_failed_try_flat_maps_to_failure(self):
         assert Try.of(self._fail_try).flat_map(self._dbl_int).is_failure()
+
+    def test_try_of_requires_callable(self):
+        result = Try.of(lambda: Try.of(random_int()))
+        assert result.is_failure() and isinstance(result.error(), TypeError)
+
+    def test_try_flat_map_requires_callable(self):
+        result = Try.of(lambda: Success(random_int()).flat_map(random_int()))
+        assert result.is_failure() and isinstance(result.error(), TypeError)
+
+    def test_try_repr(self):
+        assert str(Success(random_int())).startswith("Success")
+        assert str(Failure(random_int())).startswith("Failure")

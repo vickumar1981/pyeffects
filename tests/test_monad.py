@@ -41,3 +41,15 @@ class TestMonad:
         value = random_int()
         result = empty.or_else(Some(value))
         assert result.get() == value
+
+    def test_monad_map_requires_callable(self):
+        result = Try.of(lambda: Some(5).map(1))
+        assert result.is_failure() and isinstance(result.error(), TypeError)
+
+    def test_monad_or_else_supply_requires_callable(self):
+        result = Try.of(lambda: Some(5).or_else_supply(1))
+        assert result.is_failure() and isinstance(result.error(), TypeError)
+
+    def test_monad_or_else_requires_other_monad(self):
+        result = Try.of(lambda: Some(5).or_else(1))
+        assert result.is_failure() and isinstance(result.error(), TypeError)
