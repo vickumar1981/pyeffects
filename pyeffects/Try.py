@@ -11,10 +11,10 @@ from .Monad import Monad
 
 class Try(Monad):
     @staticmethod
-    def of(func):
+    def of(func_or_value):
         """Constructs a :class:`Try <Try>`.
 
-        :param func: function to construct a new :class:`Try` object
+        :param func_or_value: function or value to construct a new :class:`Try` object
         :rtype: pyEffects.Try
 
         Usage::
@@ -22,7 +22,7 @@ class Try(Monad):
           >>> from pyeffects.Try import *
           >>> Try.of(lambda: 5)
           Success(5)
-          >>> Try.of(lambda: "abc")
+          >>> Try.of("abc")
           Success(abc)
           >>> def error():
           ...   raise Exception("failed")
@@ -30,10 +30,8 @@ class Try(Monad):
           >>> Try.of(error)
           Failure(failed)
         """
-        if not hasattr(func, "__call__"):
-            raise TypeError("Try.of expects a callable")
         try:
-            value = func()
+            value = func_or_value() if hasattr(func_or_value, "__call__") else func_or_value
             return Success(value)
         except Exception as err:
             return Failure(err)
@@ -84,11 +82,9 @@ class Try(Monad):
           >>> def error():
           ...   raise RuntimeError("failed")
           ...
-          >>> Try.of(error).recover(RuntimeError, lambda: "abc")
+          >>> Try.of(error).recover(RuntimeError, "abc")
           Success(abc)
         """
-        if not hasattr(recover, "__call__"):
-            raise TypeError("Try.recover expects a callable as the 2nd arg")
         if self.is_failure() and isinstance(self.value, err):
             return Try.of(recover)
         return self
@@ -106,13 +102,11 @@ class Try(Monad):
           >>> def error():
           ...   raise RuntimeError("failed")
           ...
-          >>> Try.of(error).recovers([RuntimeError, NotImplementedError], lambda: "abc")
+          >>> Try.of(error).recovers([RuntimeError, NotImplementedError], "abc")
           Success(abc)
         """
         if not isinstance(errs, list):
             raise TypeError("Try.recovers expects a list of errors as the 1nd arg")
-        if not hasattr(recover, "__call__"):
-            raise TypeError("Try.recover expects a callable as the 2nd arg")
         if self.is_failure() and any([isinstance(self.value, e) for e in errs]):
             return Try.of(recover)
         return self

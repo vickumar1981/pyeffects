@@ -31,52 +31,41 @@ class TestOption:
         value = random_int()
         failed_try = Try.of(self._fail_try)
         assert failed_try.recovers([RuntimeError, AssertionError], lambda: value).is_success()
+        assert failed_try.recovers([RuntimeError, AssertionError], value).is_success()
 
     def test_recover_from_failed_try_depends_on_error(self):
         value = random_int()
         failed_try = Try.of(self._fail_try)
-        assert failed_try.recover(RuntimeError, lambda: value).is_success()
-        assert failed_try.recover(AssertionError, lambda: value).is_failure()
+        assert failed_try.recover(RuntimeError, value).is_success()
+        assert failed_try.recover(AssertionError, value).is_failure()
 
     def test_try_right_identity(self):
         value = random_int()
-        assert Try.of(lambda: value).flat_map(identity) == value
+        assert Try.of(value).flat_map(identity) == value
 
     def test_try_left_identity(self):
         value = random_int()
-        assert Try.of(lambda: value).flat_map(self._sq_int).get() == self._sq_int(value).get()
+        assert Try.of(value).flat_map(self._sq_int).get() == self._sq_int(value).get()
 
     def test_try_associativity(self):
         value = random_int()
-        value1 = Try.of(lambda: value).flat_map(lambda v1: self._sq_int(v1).flat_map(lambda v2: self._dbl_int(v2)))
-        value2 = Try.of(lambda: value).flat_map(self._sq_int).flat_map(self._dbl_int)
+        value1 = Try.of(value).flat_map(lambda v1: self._sq_int(v1).flat_map(lambda v2: self._dbl_int(v2)))
+        value2 = Try.of(value).flat_map(self._sq_int).flat_map(self._dbl_int)
         assert value1.get() == value2.get()
 
     def test_try_map_function(self):
         value = random_int()
-        assert Try.of(lambda: value).map(lambda v: v + v).get() == value * 2
+        assert Try.of(value).map(lambda v: v + v).get() == value * 2
 
     def test_failed_try_flat_maps_to_failure(self):
         assert Try.of(self._fail_try).flat_map(self._dbl_int).is_failure()
-
-    def test_try_of_requires_callable(self):
-        result = Try.of(lambda: Try.of(random_int()))
-        assert result.is_failure() and isinstance(result.error(), TypeError)
 
     def test_try_flat_map_requires_callable(self):
         result = Try.of(lambda: Success(random_int()).flat_map(random_int()))
         assert result.is_failure() and isinstance(result.error(), TypeError)
 
-    def test_try_recover_requires_callable(self):
-        result = Try.of(lambda: Success(random_int()).recover(TypeError, random_int()))
-        assert result.is_failure() and isinstance(result.error(), TypeError)
-
     def test_try_recovers_requires_list_of_exceptions(self):
         result = Try.of(lambda: Success(random_int()).recovers(TypeError, random_int()))
-        assert result.is_failure() and isinstance(result.error(), TypeError)
-
-    def test_try_recovers_requires_callable(self):
-        result = Try.of(lambda: Success(random_int()).recovers([TypeError], random_int()))
         assert result.is_failure() and isinstance(result.error(), TypeError)
 
     def test_try_repr(self):

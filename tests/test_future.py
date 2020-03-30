@@ -41,8 +41,10 @@ class TestOption:
             time.sleep(0.1)
             return value
         result = Future.run(delayed_result)
+        assert result.is_done() is False
         assert result.get() is None
         time.sleep(0.2)
+        assert result.is_done() is True
         assert result.get() == value
 
     def test_failed_future_flat_maps_to_failure(self):

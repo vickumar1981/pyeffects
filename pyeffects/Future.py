@@ -121,6 +121,24 @@ class Future(Monad):
             t.start()
         self.semaphore.release()
 
+    def is_done(self):
+        """Return is done for :class:`Future <Future>`.
+
+        :rtype: pyEffects.Future
+
+        Usage::
+
+          >>> import time
+          >>> from pyeffects.Future import *
+          >>> def wait_for_result():
+          ...   time.sleep(0.2)
+          ...   return "abc"
+          ...
+          >>> Future.run(wait_for_result).is_done()
+          False
+        """
+        return self.value is not None
+
     def is_success(self):
         """Return is success for :class:`Future <Future>`.
 
