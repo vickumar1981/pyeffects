@@ -9,7 +9,7 @@ Using the `Option class <https://en.wikipedia.org/wiki/Option_type>`_
 
 A simple monad might be a container that holds either one element or zero elements.
 
-The is the `Option class. <https://en.wikipedia.org/wiki/Option_type>`_  `Option` has two subclasses: `Some` and
+This is the `Option class. <https://en.wikipedia.org/wiki/Option_type>`_  `Option` has two subclasses: `Some` and
 `Empty`.  If the `Option` contains a value, it is `Some(value)`, otherwise it is `Empty`.
 
 We can create an `Option` in three ways:

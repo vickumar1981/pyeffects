@@ -70,7 +70,17 @@ class Future(Monad):
           >>> Future.run(get_value)
           Future(None)
         """
+        if not hasattr(func, "__call__"):
+            raise TypeError("Future.run expects a callable")
         return Future(lambda cb: Future._run_on_thread(func, cb))
+
+    def get(self):
+        if self.is_success():
+            return self.value.get()
+
+    def error(self):
+        if self.is_failure():
+            return self.value.error()
 
     def flat_map(self, func):
         """Flatmaps a function for :class:`Future <Future>`.
@@ -110,6 +120,37 @@ class Future(Monad):
             t = threading.Thread(target=sub, args=[value])
             t.start()
         self.semaphore.release()
+
+    def is_success(self):
+        """Return is success for :class:`Future <Future>`.
+
+        :rtype: pyEffects.Future
+
+        Usage::
+
+          >>> from pyeffects.Future import *
+          >>> def error():
+          ...   raise RuntimeError()
+          ...
+          >>> Future.run(error).is_success()
+          False
+        """
+        return self.value and self.value.is_success()
+
+    def is_failure(self):
+        """Return is failure for :class:`Future <Future>`.
+
+        :rtype: pyEffects.Future
+
+        Usage::
+
+          >>> from pyeffects.Future import *
+          >>> def error():
+          ...   raise RuntimeError()
+          >>> Future.run(error).is_failure()
+          True
+        """
+        return self.value and self.value.is_failure()
 
     def on_complete(self, subscriber):
         """Calls a subscriber function when :class:`Future <Future>` completes.

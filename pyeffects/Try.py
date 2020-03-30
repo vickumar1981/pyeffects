@@ -87,10 +87,35 @@ class Try(Monad):
           >>> Try.of(error).recover(RuntimeError, lambda: "abc")
           Success(abc)
         """
+        if not hasattr(recover, "__call__"):
+            raise TypeError("Try.recover expects a callable as the 2nd arg")
         if self.is_failure() and isinstance(self.value, err):
             return Try.of(recover)
-        else:
-            return self
+        return self
+
+    def recovers(self, errs, recover):
+        """Recover from an exception for :class:`Try <Try>`.
+
+        :param errs: A list of classes of exceptions to recover from.
+        :param recover: The function to apply when recovering from an exception
+        :rtype: pyEffects.Try
+
+        Usage::
+
+          >>> from pyeffects.Try import *
+          >>> def error():
+          ...   raise RuntimeError("failed")
+          ...
+          >>> Try.of(error).recovers([RuntimeError, NotImplementedError], lambda: "abc")
+          Success(abc)
+        """
+        if not isinstance(errs, list):
+            raise TypeError("Try.recovers expects a list of errors as the 1nd arg")
+        if not hasattr(recover, "__call__"):
+            raise TypeError("Try.recover expects a callable as the 2nd arg")
+        if self.is_failure() and any([isinstance(self.value, e) for e in errs]):
+            return Try.of(recover)
+        return self
 
     def error(self):
         """Recover the exception for :class:`Try <Try>`.

@@ -27,9 +27,15 @@ class TestOption:
         recovered_try = failed_try.recover(RuntimeError, lambda: value)
         assert recovered_try.is_success() and recovered_try.get() == value
 
+    def test_recovers_from_failed_try_depends_on_error(self):
+        value = random_int()
+        failed_try = Try.of(self._fail_try)
+        assert failed_try.recovers([RuntimeError, AssertionError], lambda: value).is_success()
+
     def test_recover_from_failed_try_depends_on_error(self):
         value = random_int()
         failed_try = Try.of(self._fail_try)
+        assert failed_try.recover(RuntimeError, lambda: value).is_success()
         assert failed_try.recover(AssertionError, lambda: value).is_failure()
 
     def test_try_right_identity(self):
@@ -59,6 +65,18 @@ class TestOption:
 
     def test_try_flat_map_requires_callable(self):
         result = Try.of(lambda: Success(random_int()).flat_map(random_int()))
+        assert result.is_failure() and isinstance(result.error(), TypeError)
+
+    def test_try_recover_requires_callable(self):
+        result = Try.of(lambda: Success(random_int()).recover(TypeError, random_int()))
+        assert result.is_failure() and isinstance(result.error(), TypeError)
+
+    def test_try_recovers_requires_list_of_exceptions(self):
+        result = Try.of(lambda: Success(random_int()).recovers(TypeError, random_int()))
+        assert result.is_failure() and isinstance(result.error(), TypeError)
+
+    def test_try_recovers_requires_callable(self):
+        result = Try.of(lambda: Success(random_int()).recovers([TypeError], random_int()))
         assert result.is_failure() and isinstance(result.error(), TypeError)
 
     def test_try_repr(self):

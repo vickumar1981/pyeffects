@@ -42,14 +42,22 @@ class TestMonad:
         result = empty.or_else(Some(value))
         assert result.get() == value
 
+    def test_monad_foreach_is_none(self):
+        result = Some(random_int()).foreach(lambda r: random_int())
+        assert result is None
+
     def test_monad_map_requires_callable(self):
-        result = Try.of(lambda: Some(5).map(1))
+        result = Try.of(lambda: Some(random_int()).map(random_int()))
+        assert result.is_failure() and isinstance(result.error(), TypeError)
+
+    def test_monad_foreach_requires_callable(self):
+        result = Try.of(lambda: Some(random_int()).foreach(random_int()))
         assert result.is_failure() and isinstance(result.error(), TypeError)
 
     def test_monad_or_else_supply_requires_callable(self):
-        result = Try.of(lambda: Some(5).or_else_supply(1))
+        result = Try.of(lambda: Some(random_int()).or_else_supply(random_int()))
         assert result.is_failure() and isinstance(result.error(), TypeError)
 
     def test_monad_or_else_requires_other_monad(self):
-        result = Try.of(lambda: Some(5).or_else(1))
+        result = Try.of(lambda: Some(random_int()).or_else(random_int()))
         assert result.is_failure() and isinstance(result.error(), TypeError)

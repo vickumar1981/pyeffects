@@ -11,6 +11,11 @@ class Monad:
             raise TypeError("map expects a callable")
         return self.flat_map(lambda x: self.of(func(x)))
 
+    def foreach(self, func):
+        if not hasattr(func, "__call__"):
+            raise TypeError("map expects a callable")
+        self.map(func)
+
     def get(self):
         if self.biased:
             return self.value

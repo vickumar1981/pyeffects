@@ -59,5 +59,5 @@ Handle your side-effects in Python like a boss.  Implements functional types for
    Future(Success(25))
    >>> val.on_complete(lambda v: print(v))
    Success(25)
-   >>> val.get().get()
+   >>> val.get()
    25

@@ -64,7 +64,7 @@ True
 Future(Success(25))
 >>> val.on_complete(lambda v: print(v))
 Success(25)
->>> val.get().get()
+>>> val.get()
 25
 ```
 

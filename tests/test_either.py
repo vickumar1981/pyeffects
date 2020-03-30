@@ -39,7 +39,14 @@ class TestEither:
         assert value1.get() == value2.get()
 
     def test_left_either_flat_maps_is_left(self):
-        assert Left(random_int()).flat_map(lambda v: Right(v)).is_left()
+        assert Left(random_int()).flat_map(lambda v: Left(v)).is_left()
+
+    def test_left_maps_to_left(self):
+        assert Left(random_int()).map(identity).is_left()
+
+    def test_left_map_requires_callable(self):
+        result = Try.of(lambda: Left(random_int()).map(random_int()))
+        assert result.is_failure() and isinstance(result.error(), TypeError)
 
     def test_either_flat_map_requires_callable(self):
         result = Try.of(lambda: Right(random_int()).flat_map(random_int()))
