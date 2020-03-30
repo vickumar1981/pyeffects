@@ -48,7 +48,7 @@ Handle your side-effects in Python like a boss.  Implements functional types for
    Right(25)
    >>> val.is_right()
    True
-   >>> val.get()
+   >>> val.right()
    25
 
 **Using Future**::

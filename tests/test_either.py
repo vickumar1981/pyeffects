@@ -38,11 +38,18 @@ class TestEither:
         value2 = Right(value).flat_map(self._sq_int).flat_map(self._dbl_int)
         assert value1.get() == value2.get()
 
-    def test_left_either_flat_maps_is_left(self):
-        assert Left(random_int()).flat_map(lambda v: Left(v)).is_left()
+    def test_right_value_equals_get(self):
+        value = random_int()
+        assert Right(value).right() == Right(value).get()
 
-    def test_left_maps_to_left(self):
-        assert Left(random_int()).map(identity).is_left()
+    def test_left_either_flat_maps_is_left(self):
+        value = random_int()
+        result = Left(value).flat_map(lambda v: Right(v))
+        assert result.is_left() and result.left() == value
+
+    def test_left_maps_does_not_map(self):
+        value = random_int()
+        assert Left(value).map(lambda v: v * 2).left() == value
 
     def test_left_map_requires_callable(self):
         result = Try.of(lambda: Left(random_int()).map(random_int()))

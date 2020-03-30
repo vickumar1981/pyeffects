@@ -65,12 +65,12 @@ We can map successful values as `Right` and invalid values to `Left`.
 
 ----------------
 
-**get**: We can retrieve the value of an `Either` by using `get` for both `Left` and `Right` values.
+**get**: We can retrieve the value of an `Either` by using `left` and `right`, for `Left` and `Right` values.
 
    >>> from pyeffects.Either import *
-   >>> left = Left(123)
-   >>> right = Right("abc")
-   >>> left.get()
+   >>> left_value = Left(123)
+   >>> right_value = Right("abc")
+   >>> left_value.left()
    123
-   >>> right.get()
+   >>> right_value.right()
    'abc'

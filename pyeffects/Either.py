@@ -43,7 +43,9 @@ class Either(Monad):
         """
         if not hasattr(func, "__call__"):
             raise TypeError("Either.flat_map expects a callable")
-        return func(self.value)
+        if self.is_right():
+            return func(self.value)
+        return self
 
     def is_right(self):
         """Returns if the :class:`Either <Either>` is a right projection.
@@ -56,7 +58,7 @@ class Either(Monad):
           >>> Right(5).is_right()
           True
         """
-        return isinstance(self, Right)
+        return self.biased
 
     def is_left(self):
         """Returns if the :class:`Either <Either>` is a left projection.
@@ -75,12 +77,10 @@ class Either(Monad):
 class Left(Either):
     def __init__(self, value):
         self.value = value
-        self.biased = True
+        self.biased = False
 
-    def map(self, func):
-        if not hasattr(func, "__call__"):
-            raise TypeError("map expects a callable")
-        return self.flat_map(lambda x: Left(func(x)))
+    def left(self):
+        return self.value
 
     def __repr__(self):
         return 'Left(' + str(self.value) + ')'
@@ -90,6 +90,9 @@ class Right(Either):
     def __init__(self, value):
         self.value = value
         self.biased = True
+
+    def right(self):
+        return self.value
 
     def __repr__(self):
         return 'Right(' + str(self.value) + ')'

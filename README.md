@@ -53,7 +53,7 @@ True
 Right(25)
 >>> val.is_right()
 True
->>> val.get()
+>>> val.right()
 25
 ```
 
