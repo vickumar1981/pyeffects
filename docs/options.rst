@@ -42,7 +42,7 @@ If we try to map or flat_map on an `Empty`, we get back an `Empty`
 
 ----------------
 
-**get and get_or_else**: We can retrive the value of an `Option` by using `get`. However, this is unsafe.
+**get and get_or_else**: We can retrieve the value of an `Option` by using `get`. However, this is unsafe.
 If the `Option` is `Empty`, it will throw an exception.
 
    >>> from pyeffects.Option import *
@@ -63,11 +63,19 @@ returns the contents of the Option if available, or a default value if it’s no
 
 ----------------
 
-**or_else_supply and or_else**: We can chain our `Option` with a function or another `Option`,
+**or_else_supply and or_else**: We can also supply a value if our 'Option' is empty using a function or another `Option`,
 using `or_else_supply` and `or_else` respectively.
 
    >>> from pyeffects.Option import *
    >>> empty.or_else_supply(lambda: "Hello World!")
    'Hello World!'
    >>> empty.or_else(Some("Hello World!"))
+   Some(Hello World!)
+
+----------------
+
+**foreach** can be used when we want to apply a function, but unlike with `map`, we don't care about the return value.
+
+   >>> from pyeffects.Option import *
+   >>> Some("Hello World!").foreach(lambda s: print(s))
    'Hello World!'

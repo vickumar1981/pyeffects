@@ -9,6 +9,8 @@ Monads for Python.  Side-effect explicitly.
 
 Handle your side-effects in Python like a boss.  Implements functional types for Either, Option, Try, and Future.
 
+For more detailed information, please refer to the [API Documentation](https://pyeffects.readthedocs.io/en/latest/ "API Documentation").
+
 ---
 ### 1. Install
 
