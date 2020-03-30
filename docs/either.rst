@@ -50,7 +50,9 @@ We can map successful values as `Right` and invalid values to `Left`.
    False
    >>> value.is_left()
    True
-   >>> to_int("5").map(lambda v: v * 2)
+   >>> to_int("not an integer").map(lambda v: v * 2)  #Failure does not map
+   Left(age is invalid)
+   >>> to_int("5").map(lambda v: v * 2)  # Map success and double value
    Right(10)
 
 ----------------
@@ -63,9 +65,16 @@ We can map successful values as `Right` and invalid values to `Left`.
    >>> hello.flat_map(lambda h: world.map(lambda w: h + " " + w + "!"))
    Right(Hello World!)
 
+If we try to map or flat_map on a `Left`, we get back a `Left`.
+
+   >>> from pyeffects.Either import *
+   >>> left_value = Left("Hello")
+   >>> left_value.flat_map(lambda v: Right(len(v)))
+   Left(Hello)
+
 ----------------
 
-**get**: We can retrieve the value of an `Either` by using `left` and `right`, for `Left` and `Right` values.
+**left and right**: We can retrieve the value of an `Either` by using `left` and `right`, for `Left` and `Right` values.
 
    >>> from pyeffects.Either import *
    >>> left_value = Left(123)

@@ -46,7 +46,9 @@ We can map successful values, and use `is_success()` and `is_failure()` to check
    False
    >>> value.is_failure()
    True
-   >>> to_int("5").map(lambda v: v * 2)
+   >>> to_int("not an integer").map(lambda v: v * 2)  #Failure does not map
+   Failure(invalid literal for int() with base 10: 'not an integer')
+   >>> to_int("5").map(lambda v: v * 2)  # Map success and double value
    Success(10)
 
 ----------------
@@ -62,6 +64,13 @@ Try Operations
    >>> world = Success("World")
    >>> hello.flat_map(lambda h: world.map(lambda w: h + " " + w + "!"))
    Success(Hello World!)
+
+If we try to map or flat_map on a `Failure`, we get back a `Failure`,
+
+   >>> from pyeffects.Try import *
+   >>> failed = Failure(Exception("some error"))
+   >>> failed.map(lambda e: "Error" + str(e))
+   Failure(some error)
 
 ----------------
 

@@ -41,7 +41,7 @@ We can also check if an `Option` is empty of not.
    >>> hello.flat_map(lambda h: world.map(lambda w: h + " " + w + "!"))
    Some(Hello World!)
 
-If we try to map or flat_map on an `Empty`, we get back an `Empty`
+If we try to map or flat_map on an `Empty`, we get back an `Empty`,
 
    >>> from pyeffects.Option import *
    >>> hello = Some("Hello")
