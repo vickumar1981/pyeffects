@@ -60,5 +60,5 @@ If we try to map or flat_map on a `Future` that has failed, we get back a failed
 **on_complete** can be used when we want to call a function when the future has completed.
 
    >>> from pyeffects.Future import *
-   >>> Future.of"Hello World!").on_complete(lambda s: print(s))
-   'Hello World!'
+   >>> Future.of("Hello World!").on_complete(lambda s: print(s))
+   Success(Hello World!)
