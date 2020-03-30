@@ -22,6 +22,15 @@ We can create an `Option` in three ways:
    >>> empty
    Empty()
 
+We can also check if an `Option` is empty of not.
+
+   >>> from pyeffects.Option import *
+   >>> v = Some("abc")
+   >>> v.is_defined()
+   True
+   >>> v.is_empty()
+   False
+
 ----------------
 
 **map and flat_map**: Options are monads, so we can use `flat_map` and `map` with them.

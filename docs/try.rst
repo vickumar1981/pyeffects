@@ -31,14 +31,21 @@ This makes the return type explicit and forces clients of our function to deal w
 error.
 
 For example, say we want to convert a string to an integer, and then double the value.
+We can map successful values, and use `is_success()` and `is_failure()` to check if the `Try` is a `Success` or `Failure`.
 
    >>> from pyeffects.Try import *
    >>> def to_int(s):
    ...   return Try.of(lambda: int(s))
+   ...
    >>> to_int("5")
    Success(5)
-   >>> to_int("not an integer")
+   >>> value = to_int("not an integer")
+   >>> value
    Failure(invalid literal for int() with base 10: 'not an integer')
+   >>> value.is_success()
+   False
+   >>> value.is_failure()
+   True
    >>> to_int("5").map(lambda v: v * 2)
    Success(10)
 
