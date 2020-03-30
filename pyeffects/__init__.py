@@ -21,4 +21,4 @@ Basic usage:
 :license: Apache 2.0, see LICENSE for more details.
 """
 
-__version__ = '1.00.2'
+__version__ = '1.00.3'
