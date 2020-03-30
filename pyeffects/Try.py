@@ -36,20 +36,6 @@ class Try(Monad):
         except Exception as err:
             return Failure(err)
 
-    def map(self, func):
-        """Maps a function for :class:`Try <Try>`.
-
-        :param func: function to apply to map.
-        :rtype: pyEffects.Try
-
-        Usage::
-
-          >>> from pyeffects.Try import *
-          >>> Success(5).map(lambda v: v * v)
-          Success(25)
-        """
-        return self.flat_map(lambda x: self.of(lambda: func(x)))
-
     def flat_map(self, func):
         """Flatmaps a function for :class:`Try <Try>`.
 
