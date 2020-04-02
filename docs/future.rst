@@ -14,7 +14,7 @@ We use `Future.run` to run a function asynchronously.  Let's look at an example:
    >>> import time
    >>> from pyeffects.Future import *
    >>> import time
-   >>> def delayed_result(s):
+   >>> def delayed_result():
    ...   time.sleep(0.1)
    ...   return 100
    ...

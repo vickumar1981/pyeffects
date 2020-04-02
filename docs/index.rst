@@ -11,6 +11,7 @@ Handle your side-effects in Python like a boss.  Implements functional types for
    :maxdepth: 2
 
    monads
+   map_and_flatmap
    options
    try
    either

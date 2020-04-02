@@ -14,9 +14,9 @@ and functions that allow us to work with the elements inside of it.  These are o
 because they take another function as an input parameter.  Typically, a monad has two very important higher-order
 functions called `map` and `flat_map`.
 
+`More on map and flat_map <https://pyeffects.readthedocs.io/en/latest/map_and_flatmap.html>`_
+
 .. image:: https://porizi.files.wordpress.com/2014/02/monad-transformations.png
-.. image:: https://porizi.files.wordpress.com/2014/02/map.png
-.. image:: https://porizi.files.wordpress.com/2014/02/flatmap.png
 
 Often, a complex tasks has several steps, and this can result in very complex code. We might have callbacks,
 multiple functions that pass results back and forth, conditional trees, or other kinds of sticky patterns,
@@ -25,7 +25,7 @@ that result in greater complexity and more time spent debugging.
 We often want to take a complex problem and break it down into smaller tasks, and then put
 those tasks back together to solve a problem. We can reduce the complexity by breaking down a problem,
 and letting each individual part of the process take care of its own responsibility, and then passing
-the result onto the next part in the chaing. We want to break down our problem into a number of small
+the result onto the next part in the chain. We want to break down our problem into a number of small
 functions, and then compose those functions together into one function that represents the entire task.
 
 Composing functions is the reason why we want to use monads. We can create a container that can perform

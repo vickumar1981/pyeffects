@@ -32,7 +32,7 @@ We can also check if an `Either` is `Left` or `Right`.
    >>> v.is_left()
    False
 
-For example, say we want to convert a string to an integer, and then double the value if it is a valid integer.
+Let's say we want to convert a string to an integer, and then double the value if it is a valid integer.
 We can map successful values as `Right` and invalid values to `Left`.
 
    >>> from pyeffects.Either import *
@@ -50,7 +50,7 @@ We can map successful values as `Right` and invalid values to `Left`.
    False
    >>> value.is_left()
    True
-   >>> to_int("not an integer").map(lambda v: v * 2)  #Failure does not map
+   >>> to_int("not an integer").map(lambda v: v * 2)  # Failure does not map
    Left(age is invalid)
    >>> to_int("5").map(lambda v: v * 2)  # Map success and double value
    Right(10)
