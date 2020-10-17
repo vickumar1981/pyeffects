@@ -76,6 +76,6 @@ Success(25)
 Please report any issues or bugs to the [Github issues page](https://github.com/vickumar1981/pyeffects/issues). 
 
 ---
-### 8. License
+### 7. License
 
 This project is licensed under the [Apache 2 License](https://github.com/vickumar1981/pyeffects/blob/master/LICENSE).
