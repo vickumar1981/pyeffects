@@ -11,7 +11,7 @@ Using the `Either Type <https://en.wikipedia.org/wiki/Union_type>`_
 
 An `Either` has two subclasses that hold values: `Left` and `Right`.  We can think of `Try` as a type of
 `Either` where the `Left` value is always a `Failure`.  Either is a more generic version of Try, where the
-the left value can be anything, and not just a `Failure` class.
+left value can be anything, and not just a `Failure` class.
 
 We can create an `Either` in three ways:
 
