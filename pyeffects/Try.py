@@ -6,12 +6,16 @@ pyeffects.Try
 
 This module implements the Try, Success, and Faiure classes.
 """
+from typing import Callable, List, Type, TypeVar, Union
 from .Monad import Monad
 
+A = TypeVar('A')
+B = TypeVar('B')
 
-class Try(Monad):
+
+class Try(Monad[A]):
     @staticmethod
-    def of(func_or_value):
+    def of(func_or_value: Union[A, Callable[[], A]]) -> 'Try[A]':
         """Constructs a :class:`Try <Try>`.
 
         :param func_or_value: function or value to construct a new :class:`Try` object
@@ -36,7 +40,7 @@ class Try(Monad):
         except Exception as err:
             return Failure(err)
 
-    def flat_map(self, func):
+    def flat_map(self, func: Callable[[A], 'Monad[B]']) -> 'Monad[B]':
         """Flatmaps a function for :class:`Try <Try>`.
 
         :param func: function returning a pyEffects.Try to apply to flat_map.
@@ -55,7 +59,7 @@ class Try(Monad):
         else:
             return self
 
-    def recover(self, err, recover):
+    def recover(self, err: Type[Exception], recover: Union[B, Callable[[], B]]) -> 'Try[B]':
         """Recover from an exception for :class:`Try <Try>`.
 
         :param err: The class of exception to recover from.
@@ -75,7 +79,7 @@ class Try(Monad):
             return Try.of(recover)
         return self
 
-    def recovers(self, errs, recover):
+    def recovers(self, errs: List[Type[Exception]], recover: Union[B, Callable[[], B]]) -> 'Try[B]':
         """Recover from an exception for :class:`Try <Try>`.
 
         :param errs: A list of classes of exceptions to recover from.
@@ -97,7 +101,7 @@ class Try(Monad):
             return Try.of(recover)
         return self
 
-    def error(self):
+    def error(self) -> Exception:
         """Recover the exception for :class:`Try <Try>`.
 
         :rtype: pyEffects.Try
@@ -114,7 +118,7 @@ class Try(Monad):
         if self.is_failure():
             return self.value
 
-    def is_success(self):
+    def is_success(self) -> bool:
         """Return is success for :class:`Try <Try>`.
 
         :rtype: pyEffects.Try
@@ -127,7 +131,7 @@ class Try(Monad):
         """
         return self.biased
 
-    def is_failure(self):
+    def is_failure(self) -> bool:
         """Return is failure for :class:`Try <Try>`.
 
         :rtype: pyEffects.Try
@@ -141,19 +145,19 @@ class Try(Monad):
         return not self.is_success()
 
 
-class Failure(Try):
-    def __init__(self, value):
+class Failure(Try[A]):
+    def __init__(self, value: Exception) -> None:
         self.value = value
         self.biased = False
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return 'Failure(' + str(self.value) + ')'
 
 
-class Success(Try):
-    def __init__(self, value):
+class Success(Try[A]):
+    def __init__(self, value: A) -> None:
         self.value = value
         self.biased = True
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return 'Success(' + str(self.value) + ')'

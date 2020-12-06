@@ -6,12 +6,16 @@ pyeffects.Option
 
 This module implements the Option, Some, and Empty classes.
 """
+from typing import Callable, TypeVar
 from .Monad import Monad
 
+A = TypeVar('A')
+B = TypeVar('B')
 
-class Option(Monad):
+
+class Option(Monad[A]):
     @staticmethod
-    def of(value):
+    def of(value: A) -> 'Option[A]':
         """Constructs a :class:`Option <Option>`.
 
         :param value: value of the new :class:`Option` object.
@@ -29,7 +33,7 @@ class Option(Monad):
         """
         return empty if value is None else Some(value)
 
-    def flat_map(self, func):
+    def flat_map(self, func: Callable[[A], 'Monad[B]']) -> 'Monad[B]':
         """Flatmaps a function for :class:`Option <Option>`.
 
         :param func: function returning a pyEffects.Option to apply to flat_map.
@@ -48,7 +52,7 @@ class Option(Monad):
         else:
             return empty
 
-    def is_defined(self):
+    def is_defined(self) -> bool:
         """Returns if the :class:`Option <Option>` is defined or not.
 
         :rtype: bool
@@ -61,7 +65,7 @@ class Option(Monad):
         """
         return self.biased
 
-    def is_empty(self):
+    def is_empty(self) -> bool:
         """Returns if the :class:`Option <Option>` is empty or not.
 
         :rtype: bool
@@ -75,21 +79,21 @@ class Option(Monad):
         return not self.is_defined()
 
 
-class Some(Option):
-    def __init__(self, value):
+class Some(Option[A]):
+    def __init__(self, value: A) -> None:
         self.value = value
         self.biased = True
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return 'Some(' + str(self.value) + ')'
 
 
-class Empty(Option):
-    def __init__(self):
+class Empty(Option[A]):
+    def __init__(self) -> None:
         self.value = None
         self.biased = False
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return 'Empty()'
 
 
