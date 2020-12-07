@@ -17,6 +17,7 @@ pytest-xdist = "*"
 readme-renderer = "*"
 sphinx = "*"
 tox = "*"
+mypy = "*"
 
 [packages]
 

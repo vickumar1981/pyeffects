@@ -5,17 +5,24 @@ B = TypeVar('B')
 
 
 class Monad(Generic[A]):
+    def __init__(self) -> None:
+        self.value = None
+        self.biased = None
+
     @staticmethod
-    def of(x: A) -> 'Monad[A]':
+    def of(x: B) -> 'Monad[B]':
         raise NotImplementedError("of method needs to be implemented")
 
-    def flat_map(self, f):
+    def flat_map(self, f: Callable[[A], 'Monad[B]']) -> 'Monad[B]':
         raise NotImplementedError("flat_map method needs to be implemented")
 
     def map(self, func: Callable[[A], B]) -> 'Monad[B]':
         if not hasattr(func, "__call__"):
             raise TypeError("map expects a callable")
-        return self.flat_map(lambda x: self.of(func(x)))
+
+        def wrapped(x: A) -> 'Monad[B]':
+            return self.of(func(x))
+        return self.flat_map(wrapped)
 
     def foreach(self, func: Callable[[A], B]) -> None:
         if not hasattr(func, "__call__"):
@@ -33,7 +40,7 @@ class Monad(Generic[A]):
         else:
             return v
 
-    def or_else_supply(self, func: Callable[[], A]) -> 'Monad[A]':
+    def or_else_supply(self, func: Callable[[], A]) -> A:
         if not hasattr(func, "__call__"):
             raise TypeError("or_else_supply expects a callable")
         if self.biased:

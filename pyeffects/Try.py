@@ -15,7 +15,7 @@ B = TypeVar('B')
 
 class Try(Monad[A]):
     @staticmethod
-    def of(func_or_value: Union[A, Callable[[], A]]) -> 'Try[A]':
+    def of(func_or_value: Union[B, Callable[[], B]]) -> 'Try[B]':
         """Constructs a :class:`Try <Try>`.
 
         :param func_or_value: function or value to construct a new :class:`Try` object
@@ -35,8 +35,8 @@ class Try(Monad[A]):
           Failure(failed)
         """
         try:
-            value = func_or_value() if hasattr(func_or_value, "__call__") else func_or_value
-            return Success(value)
+            value = func_or_value() if hasattr(func_or_value, "__call__") else func_or_value  # type: ignore
+            return Success(value)  # type: ignore
         except Exception as err:
             return Failure(err)
 

@@ -15,7 +15,7 @@ B = TypeVar('B')
 
 class Option(Monad[A]):
     @staticmethod
-    def of(value: A) -> 'Option[A]':
+    def of(value: B) -> 'Option[B]':
         """Constructs a :class:`Option <Option>`.
 
         :param value: value of the new :class:`Option` object.
