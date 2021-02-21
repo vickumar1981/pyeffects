@@ -2,11 +2,15 @@
 init:
 	pip install pipenv --upgrade
 	pipenv install --dev
+
 test:
 	# This runs all of the tests
+	pipenv run mypy pyeffects/*.py
 	tox
+
 ci:
-	pipenv run py.test -n 8 --boxed --junitxml=report.xml
+	pipenv run mypy pyeffects/*.py && pipenv run py.test -n 8 --boxed --junitxml=report.xml
+
 
 test-readme:
 	@pipenv run python setup.py check --restructuredtext --strict && ([ $$? -eq 0 ] && echo "README.rst and HISTORY.rst ok") || echo "Invalid markup in README.rst or HISTORY.rst!"

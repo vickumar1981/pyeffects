@@ -6,24 +6,30 @@ pyeffects.Future
 
 This module implements the Future class.
 """
+from typing import Callable, List, TypeVar
 from .Monad import Monad
 from .Option import empty, Some
-from .Try import Success, Failure
+from .Try import Success, Failure, Try
 from functools import reduce
 import threading
 
+A = TypeVar('A', covariant=True)
+B = TypeVar('B')
 
-class Future(Monad):
-    def __init__(self, func):
+
+class Future(Monad[A]):
+    subscribers: List[Callable[[A], None]]
+
+    def __init__(self, func) -> None:
         self.subscribers = []
         self.cache = empty
         self.semaphore = threading.BoundedSemaphore(1)
         self.biased = True
-        self.value = None
+        self.value = None  # type: ignore
         func(self._callback)
 
     @staticmethod
-    def of(value):
+    def of(value: B) -> 'Future[B]':
         """Constructs an immediate :class:`Future <Future>`.
 
         :param value: value of the new :class:`Future` object.
@@ -40,7 +46,7 @@ class Future(Monad):
         return Future(lambda cb: cb(Success(value)))
 
     @staticmethod
-    def _exec(func, cb):
+    def _exec(func: Callable[[], A], cb: Callable[[Try[A]], None]):
         try:
             data = func()
             cb(Success(data))
@@ -48,12 +54,12 @@ class Future(Monad):
             cb(Failure(err))
 
     @staticmethod
-    def _run_on_thread(func, cb):
+    def _run_on_thread(func: Callable[[], A], cb: Callable[[Try[A]], None]):
         thread = threading.Thread(target=Future._exec, args=[func, cb])
         thread.start()
 
     @staticmethod
-    def run(func):
+    def run(func: Callable[[], A]) -> 'Future[A]':
         """Constructs a :class:`Future <Future>` that runs asynchronously on another thread.
 
         :param func: function to run on new thread and return a new :class:`Future` object
@@ -74,15 +80,15 @@ class Future(Monad):
             raise TypeError("Future.run expects a callable")
         return Future(lambda cb: Future._run_on_thread(func, cb))
 
-    def get(self):
+    def get(self) -> A:  # type: ignore
         if self.is_success():
-            return self.value.get()
+            return self.value.get()  # type: ignore
 
-    def error(self):
+    def error(self) -> Exception:  # type: ignore
         if self.is_failure():
-            return self.value.error()
+            return self.value.error()  # type: ignore
 
-    def flat_map(self, func):
+    def flat_map(self, func: Callable[[A], 'Monad[B]']) -> 'Monad[B]':
         """Flatmaps a function for :class:`Future <Future>`.
 
         :param func: function returning a pyEffects.Future to apply to flat_map.
@@ -98,7 +104,7 @@ class Future(Monad):
             raise TypeError("Future.flat_map expects a callable")
         return Future(
             lambda cb: self.on_complete(
-                lambda value: cb(value) if value.is_failure() else func(value.value).on_complete(cb)
+                lambda value: cb(value) if value.is_failure() else func(value.value).on_complete(cb)  # type: ignore
             )
         )
 
@@ -111,17 +117,17 @@ class Future(Monad):
                 )
             ), arr, Future.of([]))
 
-    def _callback(self, value):
-        self.value = value
+    def _callback(self, value: Try[A]) -> None:
+        self.value = value  # type: ignore
         self.semaphore.acquire()
-        self.cache = Some(value)
+        self.cache = Some(value)  # type: ignore
         while len(self.subscribers) > 0:
             sub = self.subscribers.pop(0)
             t = threading.Thread(target=sub, args=[value])
             t.start()
         self.semaphore.release()
 
-    def is_done(self):
+    def is_done(self) -> bool:
         """Return is done for :class:`Future <Future>`.
 
         :rtype: pyEffects.Future
@@ -139,7 +145,7 @@ class Future(Monad):
         """
         return self.value is not None
 
-    def is_success(self):
+    def is_success(self) -> bool:
         """Return is success for :class:`Future <Future>`.
 
         :rtype: pyEffects.Future
@@ -153,9 +159,9 @@ class Future(Monad):
           >>> Future.run(error).is_success()
           False
         """
-        return self.value and self.value.is_success()
+        return self.value and self.value.is_success()  # type: ignore
 
-    def is_failure(self):
+    def is_failure(self) -> bool:
         """Return is failure for :class:`Future <Future>`.
 
         :rtype: pyEffects.Future
@@ -168,9 +174,9 @@ class Future(Monad):
           >>> Future.run(error).is_failure()
           True
         """
-        return self.value and self.value.is_failure()
+        return self.value and self.value.is_failure()  # type: ignore
 
-    def on_complete(self, subscriber):
+    def on_complete(self, subscriber: Callable[[A], None]) -> None:
         """Calls a subscriber function when :class:`Future <Future>` completes.
 
         :param subscriber: function to call when :class:`Future` completes.
@@ -192,5 +198,5 @@ class Future(Monad):
             self.subscribers.append(subscriber)
             self.semaphore.release()
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return 'Future(' + str(self.value) + ')'

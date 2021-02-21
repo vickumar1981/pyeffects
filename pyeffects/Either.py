@@ -6,12 +6,16 @@ pyeffects.Either
 
 This module implements the Either, Left, and Right classes.
 """
+from typing import Callable, TypeVar
 from .Monad import Monad
 
+A = TypeVar('A', covariant=True)
+B = TypeVar('B')
 
-class Either(Monad):
+
+class Either(Monad[A]):
     @staticmethod
-    def of(value):
+    def of(value: B) -> 'Either[B]':
         """Constructs a :class:`Either <Either>`.
 
         :param value: value of the new :class:`Either` object.
@@ -29,7 +33,7 @@ class Either(Monad):
         """
         return Right(value)
 
-    def flat_map(self, func):
+    def flat_map(self, func: Callable[[A], 'Monad[B]']) -> 'Monad[B]':
         """Flatmaps a function for :class:`Either <Either>`.
 
         :param func: function returning a pyEffects.Either to apply to flat_map.
@@ -45,9 +49,9 @@ class Either(Monad):
             raise TypeError("Either.flat_map expects a callable")
         if self.is_right():
             return func(self.value)
-        return self
+        return self  # type: ignore
 
-    def is_right(self):
+    def is_right(self) -> bool:
         """Returns if the :class:`Either <Either>` is a right projection.
 
         :rtype: bool
@@ -60,7 +64,7 @@ class Either(Monad):
         """
         return self.biased
 
-    def is_left(self):
+    def is_left(self) -> bool:
         """Returns if the :class:`Either <Either>` is a left projection.
 
         :rtype: bool
@@ -74,25 +78,25 @@ class Either(Monad):
         return not self.is_right()
 
 
-class Left(Either):
-    def __init__(self, value):
+class Left(Either[A]):
+    def __init__(self, value: A) -> None:
         self.value = value
         self.biased = False
 
     def left(self):
         return self.value
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return 'Left(' + str(self.value) + ')'
 
 
-class Right(Either):
-    def __init__(self, value):
+class Right(Either[A]):
+    def __init__(self, value: A) -> None:
         self.value = value
         self.biased = True
 
     def right(self):
         return self.value
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return 'Right(' + str(self.value) + ')'

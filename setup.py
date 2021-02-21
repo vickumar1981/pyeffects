@@ -69,7 +69,7 @@ setup(
     package_data={'': ['LICENSE', 'NOTICE'], 'pyeffects': ['*.pem']},
     package_dir={'pyeffects': 'pyeffects'},
     include_package_data=True,
-    python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*",
+    python_requires=">=3.6",
     install_requires=requires,
     license=about['__license__'],
     zip_safe=False,
