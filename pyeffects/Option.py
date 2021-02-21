@@ -9,7 +9,7 @@ This module implements the Option, Some, and Empty classes.
 from typing import Callable, TypeVar
 from .Monad import Monad
 
-A = TypeVar('A')
+A = TypeVar('A', covariant=True)
 B = TypeVar('B')
 
 
@@ -90,11 +90,11 @@ class Some(Option[A]):
 
 class Empty(Option[A]):
     def __init__(self) -> None:
-        self.value = None
+        self.value = None  # type: ignore
         self.biased = False
 
     def __repr__(self) -> str:
         return 'Empty()'
 
 
-empty = Empty()
+empty = Empty()  # type: ignore

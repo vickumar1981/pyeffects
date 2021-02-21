@@ -9,7 +9,7 @@ This module implements the Try, Success, and Faiure classes.
 from typing import Callable, List, Type, TypeVar, Union
 from .Monad import Monad
 
-A = TypeVar('A')
+A = TypeVar('A', covariant=True)
 B = TypeVar('B')
 
 
@@ -57,7 +57,7 @@ class Try(Monad[A]):
         if self.is_success():
             return func(self.value)
         else:
-            return self
+            return self  # type: ignore
 
     def recover(self, err: Type[Exception], recover: Union[B, Callable[[], B]]) -> 'Try[B]':
         """Recover from an exception for :class:`Try <Try>`.
@@ -77,7 +77,7 @@ class Try(Monad[A]):
         """
         if self.is_failure() and isinstance(self.value, err):
             return Try.of(recover)
-        return self
+        return self  # type: ignore
 
     def recovers(self, errs: List[Type[Exception]], recover: Union[B, Callable[[], B]]) -> 'Try[B]':
         """Recover from an exception for :class:`Try <Try>`.
@@ -99,9 +99,9 @@ class Try(Monad[A]):
             raise TypeError("Try.recovers expects a list of errors as the 1nd arg")
         if self.is_failure() and any([isinstance(self.value, e) for e in errs]):
             return Try.of(recover)
-        return self
+        return self  # type: ignore
 
-    def error(self) -> Exception:
+    def error(self) -> Exception:  # type: ignore
         """Recover the exception for :class:`Try <Try>`.
 
         :rtype: pyEffects.Try
@@ -116,7 +116,7 @@ class Try(Monad[A]):
           RuntimeError()
         """
         if self.is_failure():
-            return self.value
+            return self.value  # type: ignore
 
     def is_success(self) -> bool:
         """Return is success for :class:`Try <Try>`.
@@ -147,7 +147,7 @@ class Try(Monad[A]):
 
 class Failure(Try[A]):
     def __init__(self, value: Exception) -> None:
-        self.value = value
+        self.value = value  # type: ignore
         self.biased = False
 
     def __repr__(self) -> str:

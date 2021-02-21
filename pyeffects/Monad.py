@@ -5,9 +5,8 @@ B = TypeVar('B')
 
 
 class Monad(Generic[A]):
-    def __init__(self) -> None:
-        self.value = None
-        self.biased = None
+    value: A
+    biased: bool
 
     @staticmethod
     def of(x: B) -> 'Monad[B]':

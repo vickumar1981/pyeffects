@@ -9,13 +9,13 @@ This module implements the Either, Left, and Right classes.
 from typing import Callable, TypeVar
 from .Monad import Monad
 
-A = TypeVar('A')
+A = TypeVar('A', covariant=True)
 B = TypeVar('B')
 
 
 class Either(Monad[A]):
     @staticmethod
-    def of(value: A) -> 'Either[A]':
+    def of(value: B) -> 'Either[B]':
         """Constructs a :class:`Either <Either>`.
 
         :param value: value of the new :class:`Either` object.
@@ -49,7 +49,7 @@ class Either(Monad[A]):
             raise TypeError("Either.flat_map expects a callable")
         if self.is_right():
             return func(self.value)
-        return self
+        return self  # type: ignore
 
     def is_right(self) -> bool:
         """Returns if the :class:`Either <Either>` is a right projection.
@@ -78,8 +78,8 @@ class Either(Monad[A]):
         return not self.is_right()
 
 
-class Left(Either[B]):
-    def __init__(self, value: B) -> None:
+class Left(Either[A]):
+    def __init__(self, value: A) -> None:
         self.value = value
         self.biased = False
 

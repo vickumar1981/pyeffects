@@ -6,28 +6,30 @@ pyeffects.Future
 
 This module implements the Future class.
 """
-from typing import Callable, List, Type, TypeVar, Union
+from typing import Callable, List, TypeVar
 from .Monad import Monad
 from .Option import empty, Some
 from .Try import Success, Failure, Try
 from functools import reduce
 import threading
 
-A = TypeVar('A')
+A = TypeVar('A', covariant=True)
 B = TypeVar('B')
 
 
 class Future(Monad[A]):
+    subscribers: List[Callable[[A], None]]
+
     def __init__(self, func) -> None:
         self.subscribers = []
         self.cache = empty
         self.semaphore = threading.BoundedSemaphore(1)
         self.biased = True
-        self.value = None
+        self.value = None  # type: ignore
         func(self._callback)
 
     @staticmethod
-    def of(value: A) -> 'Future[A]':
+    def of(value: B) -> 'Future[B]':
         """Constructs an immediate :class:`Future <Future>`.
 
         :param value: value of the new :class:`Future` object.
@@ -78,13 +80,13 @@ class Future(Monad[A]):
             raise TypeError("Future.run expects a callable")
         return Future(lambda cb: Future._run_on_thread(func, cb))
 
-    def get(self) -> A:
+    def get(self) -> A:  # type: ignore
         if self.is_success():
-            return self.value.get()
+            return self.value.get()  # type: ignore
 
-    def error(self) -> Exception:
+    def error(self) -> Exception:  # type: ignore
         if self.is_failure():
-            return self.value.error()
+            return self.value.error()  # type: ignore
 
     def flat_map(self, func: Callable[[A], 'Monad[B]']) -> 'Monad[B]':
         """Flatmaps a function for :class:`Future <Future>`.
@@ -102,7 +104,7 @@ class Future(Monad[A]):
             raise TypeError("Future.flat_map expects a callable")
         return Future(
             lambda cb: self.on_complete(
-                lambda value: cb(value) if value.is_failure() else func(value.value).on_complete(cb)
+                lambda value: cb(value) if value.is_failure() else func(value.value).on_complete(cb)  # type: ignore
             )
         )
 
@@ -116,9 +118,9 @@ class Future(Monad[A]):
             ), arr, Future.of([]))
 
     def _callback(self, value: Try[A]) -> None:
-        self.value = value
+        self.value = value  # type: ignore
         self.semaphore.acquire()
-        self.cache = Some(value)
+        self.cache = Some(value)  # type: ignore
         while len(self.subscribers) > 0:
             sub = self.subscribers.pop(0)
             t = threading.Thread(target=sub, args=[value])
@@ -157,7 +159,7 @@ class Future(Monad[A]):
           >>> Future.run(error).is_success()
           False
         """
-        return self.value and self.value.is_success()
+        return self.value and self.value.is_success()  # type: ignore
 
     def is_failure(self) -> bool:
         """Return is failure for :class:`Future <Future>`.
@@ -172,7 +174,7 @@ class Future(Monad[A]):
           >>> Future.run(error).is_failure()
           True
         """
-        return self.value and self.value.is_failure()
+        return self.value and self.value.is_failure()  # type: ignore
 
     def on_complete(self, subscriber: Callable[[A], None]) -> None:
         """Calls a subscriber function when :class:`Future <Future>` completes.
