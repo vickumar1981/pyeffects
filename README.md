@@ -2,7 +2,7 @@
 
 # pyEffects  
 
-[![Build Status](https://api.travis-ci.org/vickumar1981/pyeffects.svg?branch=master)](https://travis-ci.org/vickumar1981/pyeffects/builds) [![PyPI version](https://badge.fury.io/py/pyeffects.svg)](https://badge.fury.io/py/pyeffects) [![Documentation Status](https://readthedocs.org/projects/pyeffects/badge/?version=latest)](https://pyeffects.readthedocs.io/en/latest/?badge=latest)
+[![Build Status](https://api.travis-ci.com/vickumar1981/pyeffects.svg?branch=master)](https://travis-ci.com/vickumar1981/pyeffects/builds) [![PyPI version](https://badge.fury.io/py/pyeffects.svg)](https://badge.fury.io/py/pyeffects) [![Documentation Status](https://readthedocs.org/projects/pyeffects/badge/?version=latest)](https://pyeffects.readthedocs.io/en/latest/?badge=latest)
  [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/vickumar1981/pyeffects/blob/master/LICENSE)
 
 Monads for Python.  Side-effect explicitly.
