@@ -56,3 +56,42 @@ class TestOption:
 
     def test_future_repr(self):
         assert str(Future.of(random_int())).startswith("Future")
+
+    def test_combining_futures_with_flat_map(self):
+        value1 = random_int()
+        value2 = random_int()
+
+        def delayed_result1() -> int:
+            time.sleep(0.1)
+            return value1
+
+        def delayed_result2() -> int:
+            time.sleep(0.1)
+            return value2
+
+        result1 = Future.run(delayed_result1)
+        result2 = Future.run(delayed_result2)
+        result = result1.flat_map(lambda v1: result2.map(lambda v2: v1 + v2))
+        time.sleep(0.2)
+        assert result.is_done() is True
+        assert result.get() == value1 + value2
+
+    def test_combining_futures_with_traverse(self):
+        value1 = random_int()
+        value2 = random_int()
+
+        def delayed_result1() -> int:
+            time.sleep(0.1)
+            return value1
+
+        def delayed_result2() -> int:
+            time.sleep(0.1)
+            return value2
+
+        result1 = Future.run(delayed_result1)
+        result2 = Future.run(delayed_result2)
+        result = Future.traverse([result1, result2])
+        time.sleep(0.2)
+        assert result.is_done() is True
+        assert result.get() == [value1, value2]
+
