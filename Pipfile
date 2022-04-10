@@ -18,6 +18,7 @@ readme-renderer = "*"
 sphinx = "*"
 tox = "*"
 mypy = "*"
+typing_extensions = "*"
 
 [packages]
 

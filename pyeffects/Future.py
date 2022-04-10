@@ -110,9 +110,9 @@ class Future(Monad[A]):
 
     @staticmethod
     def traverse(arr):
-        return lambda f: reduce(
+        return reduce(
             lambda acc, elem: acc.flat_map(
-                lambda values: f(elem).map(
+                lambda values: elem.map(
                     lambda value: values + [value]
                 )
             ), arr, Future.of([]))
