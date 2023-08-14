@@ -95,3 +95,15 @@ class TestOption:
         assert result.is_done() is True
         assert result.get() == [value1, value2]
 
+    def test_on_success(self, capsys):
+        value = random_int()
+
+        def delayed_result() -> int:
+            time.sleep(0.1)
+            return value
+
+        result = Future.run(delayed_result)
+        result.on_success(lambda v: print(v, end=""))
+        time.sleep(0.2)
+        assert result.is_done() is True
+        assert capsys.readouterr().out == result.value.__repr__()

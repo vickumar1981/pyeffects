@@ -198,5 +198,33 @@ class Future(Monad[A]):
             self.subscribers.append(subscriber)
             self.semaphore.release()
 
+    def on_success(self, subscriber: Callable[[A], None]) -> None:
+        """Calls a subscriber function when :class:`Future <Future>` completes successfully.
+
+        :param subscriber: function to call when :class:`Future` completes successfully.
+
+        Usage::
+
+          >>> from pyeffects.Future import *
+          >>> val = Future.of(5).map(lambda v: v * v)
+          >>> val.on_success(lambda v: print(v))
+          Success(25)
+
+          >>> def error():
+          ...   raise RuntimeError()
+          >>> Future.run(error).on_success(lambda _: print(42))
+        """
+        self.semaphore.acquire()
+        if self.is_failure():
+            self.semaphore.release()
+            return
+
+        if self.cache.is_defined():
+            self.semaphore.release()
+            subscriber(self.cache.value)
+        else:
+            self.subscribers.append(subscriber)
+            self.semaphore.release()
+
     def __repr__(self) -> str:
         return 'Future(' + str(self.value) + ')'
