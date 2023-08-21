@@ -1,6 +1,6 @@
 from typing import Callable, Generic, TypeVar
 
-A = TypeVar('A')
+A = TypeVar('A', covariant=True)
 B = TypeVar('B')
 
 
@@ -19,7 +19,7 @@ class Monad(Generic[A]):
         if not hasattr(func, "__call__"):
             raise TypeError("map expects a callable")
 
-        def wrapped(x: A) -> 'Monad[B]':
+        def wrapped(x: A) -> 'Monad[B]':  # type: ignore
             return self.of(func(x))
         return self.flat_map(wrapped)
 
@@ -33,7 +33,7 @@ class Monad(Generic[A]):
             return self.value
         raise TypeError("get cannot be called on this class")
 
-    def get_or_else(self, v: A) -> A:
+    def get_or_else(self, v: A) -> A:  # type: ignore
         if self.biased:
             return self.value
         else:

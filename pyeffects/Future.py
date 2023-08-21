@@ -13,7 +13,7 @@ from .Try import Success, Failure, Try
 from functools import reduce
 import threading
 
-A = TypeVar('A')
+A = TypeVar('A', covariant=True)
 B = TypeVar('B')
 
 

@@ -9,7 +9,7 @@ This module implements the Try, Success, and Faiure classes.
 from typing import Callable, List, Type, TypeVar, Union
 from .Monad import Monad
 
-A = TypeVar('A')
+A = TypeVar('A', covariant=True)
 B = TypeVar('B')
 
 
