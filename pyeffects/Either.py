@@ -9,7 +9,7 @@ This module implements the Either, Left, and Right classes.
 from typing import Callable, TypeVar
 from .Monad import Monad
 
-A = TypeVar('A', covariant=True)
+A = TypeVar('A')
 B = TypeVar('B')
 
 
