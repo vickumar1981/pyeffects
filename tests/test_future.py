@@ -4,7 +4,7 @@ from .random_int_generator import random_int
 import time
 
 
-class TestOption:
+class TestFuture:
     @staticmethod
     def _sq_int(v):
         return Future.of(v * v)
@@ -95,7 +95,7 @@ class TestOption:
         assert result.is_done() is True
         assert result.get() == [value1, value2]
 
-    def test_on_success(self, capsys):
+    def test_on_success_success_case(self, capsys):
         value = random_int()
 
         def delayed_result() -> int:
@@ -107,3 +107,13 @@ class TestOption:
         time.sleep(0.2)
         assert result.is_done() is True
         assert capsys.readouterr().out == result.value.__repr__()
+
+    def test_on_success_fail_case(self, capsys):
+        def error():
+            raise RuntimeError()
+
+        result = Future.run(error)
+        result.on_success(lambda _: print(42))
+        time.sleep(0.2)
+        assert result.is_failure() is True
+        assert not capsys.readouterr().out
