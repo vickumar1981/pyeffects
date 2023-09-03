@@ -68,6 +68,32 @@ class TestOption:
         result = Try.of(lambda: Success(random_int()).recovers(TypeError, random_int()))
         assert result.is_failure() and isinstance(result.error(), TypeError)
 
+    def test_try_on_success_done(self):
+        xs = [1, 2, 3]
+        Try.of(xs).on_success(lambda l: l.append(4))
+        assert xs == [1, 2, 3, 4]
+
+    def test_try_on_success_skipped(self):
+        def error():
+            raise RuntimeError()
+
+        xs = [1, 2, 3]
+        Try.of(error).on_success(lambda _: xs.append(4))
+        assert xs == [1, 2, 3]
+    
+    def test_try_on_failure_done(self):
+        def error():
+            raise RuntimeError('Error!')
+
+        errors = []
+        Try.of(error).on_failure(lambda e: errors.append(str(e)))
+        assert errors == ['Error!']
+
+    def test_try_on_failure_skipped(self):
+        errors = []
+        Try.of([1, 2, 3]).on_failure(lambda e: errors.append[str(e)])
+        assert not errors
+
     def test_try_repr(self):
         assert str(Success(random_int())).startswith("Success")
         assert str(Failure(random_int())).startswith("Failure")
