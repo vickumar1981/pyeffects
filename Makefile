@@ -9,7 +9,7 @@ test:
 	tox
 
 ci:
-	pipenv run mypy pyeffects/*.py && pipenv run py.test -n 8 --boxed --junitxml=report.xml
+	pipenv run mypy pyeffects/*.py && pipenv run py.test -n 8 --junitxml=report.xml
 
 
 test-readme:
