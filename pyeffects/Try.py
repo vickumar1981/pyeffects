@@ -144,6 +144,37 @@ class Try(Monad[A]):
         """
         return not self.is_success()
 
+    def on_success(self, func: Callable[[A], None]) -> None:
+        """Calls a function on success.
+        
+        :rtype pyEffects.Try
+
+        Usage::
+
+          >>> from pyeffects.Try import *
+          >>> Try.of('abc').on_success(print)
+          abc
+        """
+
+        if self.is_success():
+            func(self.value)
+
+
+    def on_failure(self, func: Callable[[Exception], None]) -> None:
+        """Calls a function on failure.
+        
+        :rtype pyEffects.Try
+
+        Usage::
+
+          >>> from pyeffects.Try import *
+          >>> Failure(RuntimeError('Error!')).on_failure(print)
+          Error!
+        """
+
+        if self.is_failure():
+            func(self.error())
+
 
 class Failure(Try[A]):
     def __init__(self, value: Exception) -> None:
