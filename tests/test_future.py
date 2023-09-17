@@ -117,3 +117,26 @@ class TestFuture:
         time.sleep(0.2)
         assert result.is_failure() is True
         assert not capsys.readouterr().out
+
+    def test_on_failure_success_case(self, capsys):
+        value = random_int()
+
+        def delayed_result() -> int:
+            time.sleep(0.1)
+            return value
+
+        result = Future.run(delayed_result)
+        result.on_failure(print)
+        time.sleep(0.2)
+        assert result.is_failure() is False
+        assert not capsys.readouterr().out
+
+    def test_on_failure_fail_case(self, capsys):
+        def error():
+            raise RuntimeError()
+
+        result = Future.run(error)
+        result.on_failure(lambda _: print("ERROR!", end=""))
+        time.sleep(0.2)
+        assert result.is_failure() is True
+        assert capsys.readouterr().out == "ERROR!"

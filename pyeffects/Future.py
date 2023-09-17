@@ -226,5 +226,31 @@ class Future(Monad[A]):
             self.subscribers.append(subscriber)
             self.semaphore.release()
 
+    def on_failure(self, subscriber: Callable[[A], None]) -> None:
+        """Calls a subscriber function when :class:`Future <Future>` completes with error.
+
+        :param subscriber: function to call when :class:`Future` completes with error.
+
+        Usage::
+
+          >>> from pyeffects.Future import *
+          >>> val = Future.of(5).map(lambda v: v * v)
+          >>> val.on_failure(lambda v: print(v))
+
+          >>> def error():
+          ...   raise RuntimeError()
+          >>> Future.run(error).on_failure(lambda _: print('ERROR!'))
+          ERROR!
+        """
+        self.semaphore.acquire()
+        if self.is_success():
+            self.semaphore.release()
+            return
+
+        if self.is_failure():
+            subscriber(self.error)
+
+        self.semaphore.release()
+
     def __repr__(self) -> str:
         return 'Future(' + str(self.value) + ')'
