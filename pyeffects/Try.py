@@ -159,7 +159,6 @@ class Try(Monad[A]):
         if self.is_success():
             func(self.value)
 
-
     def on_failure(self, func: Callable[[Exception], None]) -> None:
         """Calls a function on failure.
         

@@ -226,7 +226,7 @@ class Future(Monad[A]):
             self.subscribers.append(subscriber)
             self.semaphore.release()
 
-    def on_failure(self, subscriber: Callable[[A], None]) -> None:
+    def on_failure(self, subscriber: Callable[[Exception], None]) -> None:
         """Calls a subscriber function when :class:`Future <Future>` completes with error.
 
         :param subscriber: function to call when :class:`Future` completes with error.
@@ -248,7 +248,7 @@ class Future(Monad[A]):
             return
 
         if self.is_failure():
-            subscriber(self.error)
+            subscriber(self.error())
 
         self.semaphore.release()
 
