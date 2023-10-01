@@ -100,6 +100,9 @@ class Right(Either[A]):
 
     def right(self):
         return self.value
+    
+    def __str__(self) -> str:
+        return 'Right(' + str(self.value) + ')'
 
     def __repr__(self) -> str:
-        return 'Right(' + str(self.value) + ')'
+        return self.__str__()
