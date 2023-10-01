@@ -34,15 +34,11 @@ jobs:
         run: |
           make init
 
-      - name: Run tests
+      - name: Run tests and coverage
         run: |
           make ci
 
-      - name: Build coverage file
-        run: |
-          pipenv run py.test --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=pyeffects tests/ | tee pytest-coverage.txt
-
-      - name: Pytest coverage comment
+      - name: Coverage comment
         uses: MishaKav/pytest-coverage-comment@main
         with:
           pytest-coverage-path: ./pytest-coverage.txt
