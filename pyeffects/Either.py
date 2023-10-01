@@ -86,8 +86,11 @@ class Left(Either[A]):
     def left(self):
         return self.value
 
-    def __repr__(self) -> str:
+    def __str__(self) -> str:
         return 'Left(' + str(self.value) + ')'
+
+    def __repr__(self) -> str:
+        return self.__str__()
 
 
 class Right(Either[A]):
