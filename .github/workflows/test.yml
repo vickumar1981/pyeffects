@@ -1,11 +1,11 @@
-name: test
+name: Pull Request
 
 on:
-  - push
   - pull_request
 
 permissions:
   contents: read
+  pull-requests: write
 
 concurrency:
   group: test-${{ github.head_ref || github.run_id }}
