@@ -252,5 +252,8 @@ class Future(Monad[A]):
 
         self.semaphore.release()
 
+    def __str__(self) -> str:
+        return 'Future(' + str(self.value) + ')' 
+
     def __repr__(self) -> str:
-        return 'Future(' + str(self.value) + ')'
+        return self.__str__()

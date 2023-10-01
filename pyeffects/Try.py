@@ -180,8 +180,11 @@ class Failure(Try[A]):
         self.value = value  # type: ignore
         self.biased = False
 
-    def __repr__(self) -> str:
+    def __str__(self) -> str:
         return 'Failure(' + str(self.value) + ')'
+
+    def __repr__(self) -> str:
+        return self.__str__()
 
 
 class Success(Try[A]):
@@ -189,5 +192,8 @@ class Success(Try[A]):
         self.value = value
         self.biased = True
 
-    def __repr__(self) -> str:
+    def __str__(self) -> str:
         return 'Success(' + str(self.value) + ')'
+
+    def __repr__(self) -> str:
+        return self.__str__()

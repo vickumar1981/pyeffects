@@ -84,8 +84,11 @@ class Some(Option[A]):
         self.value = value
         self.biased = True
 
-    def __repr__(self) -> str:
+    def __str__(self) -> str:
         return 'Some(' + str(self.value) + ')'
+
+    def __repr__(self) -> str:
+        return self.__str__()
 
 
 class Empty(Option[A]):
@@ -93,8 +96,11 @@ class Empty(Option[A]):
         self.value = None  # type: ignore
         self.biased = False
 
-    def __repr__(self) -> str:
+    def __str__(self) -> str:
         return 'Empty()'
+
+    def __repr__(self) -> str:
+        return self.__str__()
 
 
 empty = Empty()  # type: ignore
