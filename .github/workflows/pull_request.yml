@@ -1,0 +1,61 @@
+name: Pull Request
+
+on:
+  - pull_request
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: test-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11"]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install pyenv
+        run: |
+          curl https://pyenv.run | bash
+
+      - name: Install dependencies
+        run: |
+          make init
+
+      - name: Run tests and coverage
+        run: |
+          make ci
+
+      - name: Coverage comment
+        uses: MishaKav/pytest-coverage-comment@main
+        with:
+          pytest-coverage-path: ./pytest-coverage.txt
+          junitxml-path: ./pytest.xml
+
+      - name: Check the output coverage
+        run: |
+          echo "Coverage Percantage - ${{ steps.coverageComment.outputs.coverage }}"
+          echo "Coverage Color - ${{ steps.coverageComment.outputs.color }}"
+          echo "Coverage Html - ${{ steps.coverageComment.outputs.coverageHtml }}"
+          echo "Summary Report - ${{ steps.coverageComment.outputs.summaryReport }}"
+
+          echo "Coverage Warnings - ${{ steps.coverageComment.outputs.warnings }}"
+
+          echo "Coverage Errors - ${{ steps.coverageComment.outputs.errors }}"
+          echo "Coverage Failures - ${{ steps.coverageComment.outputs.failures }}"
+          echo "Coverage Skipped - ${{ steps.coverageComment.outputs.skipped }}"
+          echo "Coverage Tests - ${{ steps.coverageComment.outputs.tests }}"
+          echo "Coverage Time - ${{ steps.coverageComment.outputs.time }}"
+          echo "Not Success Test Info - ${{ steps.coverageComment.outputs.notSuccessTestInfo }}"

@@ -9,7 +9,8 @@ test:
 	tox
 
 ci:
-	pipenv run mypy pyeffects/*.py && pipenv run py.test -n 8 --junitxml=report.xml
+	pipenv run mypy pyeffects/*.py
+	pipenv run py.test --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=pyeffects tests/ | tee pytest-coverage.txt
 
 
 test-readme:
