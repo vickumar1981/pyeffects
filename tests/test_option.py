@@ -41,3 +41,9 @@ class TestOption:
     def test_option_repr(self):
         assert str(Some(random_int())).startswith("Some")
         assert str(empty).startswith("Empty")
+
+    def test_Some_equality(self):
+        assert Some(5) == Some(5)
+
+    def test_empty_equality(self):
+        assert Empty() == Empty()
