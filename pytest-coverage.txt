@@ -1,0 +1,30 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.12, pytest-7.4.0, pluggy-0.13.1
+rootdir: /home/runner/work/pyeffects/pyeffects
+configfile: pytest.ini
+plugins: xdist-3.3.1, cov-4.1.0, mock-3.11.1
+collected 63 items
+
+tests/test_either.py ............                                        [ 19%]
+tests/test_future.py ..............                                      [ 41%]
+tests/test_monad.py ..............                                       [ 63%]
+tests/test_option.py .......                                             [ 74%]
+tests/test_try.py ................                                       [100%]
+
+----- generated xml file: /home/runner/work/pyeffects/pyeffects/pytest.xml -----
+
+---------- coverage: platform linux, python 3.10.12-final-0 ----------
+Name                       Stmts   Miss  Cover   Missing
+--------------------------------------------------------
+pyeffects/Either.py           39      2    95%   93, 108
+pyeffects/Future.py           94      6    94%   80, 223-224, 247-248, 259
+pyeffects/Monad.py            43      1    98%   16
+pyeffects/Option.py           36      2    94%   91, 103
+pyeffects/Try.py              58      2    97%   102, 187
+pyeffects/__version__.py       9      9     0%   1-9
+--------------------------------------------------------
+TOTAL                        281     22    92%
+
+1 file skipped due to complete coverage.
+
+============================== 63 passed in 1.81s ==============================
