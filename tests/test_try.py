@@ -97,3 +97,9 @@ class TestOption:
     def test_try_repr(self):
         assert str(Success(random_int())).startswith("Success")
         assert str(Failure(random_int())).startswith("Failure")
+
+    def test_failure_equality(self):
+        assert Failure( 5) == Failure(5)
+
+    def test_success_equality(self):
+        assert Success(5) == Success(5)

@@ -62,3 +62,9 @@ class TestEither:
     def test_either_repr(self):
         assert str(Right(random_int())).startswith("Right")
         assert str(Left(random_int())).startswith("Left")
+
+    def test_left_equality(self):
+        assert Left(5) == Left(5)
+    
+    def test_right_equality(self):
+        assert Right(5) == Right(5)
