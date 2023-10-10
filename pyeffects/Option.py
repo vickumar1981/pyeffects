@@ -84,7 +84,7 @@ class Some(Option[A]):
         self.value = value
         self.biased = True
 
-    def __eq__(self, other: 'Option[A]') -> bool:
+    def __eq__(self, other: 'Option[A]') -> bool: # type: ignore
         return self.is_defined() == other.is_defined() and self.value == other.value
 
 
@@ -100,7 +100,7 @@ class Empty(Option[A]):
         self.value = None  # type: ignore
         self.biased = False
 
-    def __eq__(self, other: 'Option[A]') -> bool:
+    def __eq__(self, other: 'Option[A]') -> bool: # type: ignore
         return self.is_empty() == other.is_empty() and self.value == other.value
 
     def __str__(self) -> str:

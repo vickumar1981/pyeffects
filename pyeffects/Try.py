@@ -180,7 +180,7 @@ class Failure(Try[A]):
         self.value = value  # type: ignore
         self.biased = False
 
-    def __eq__(self, other: 'Try[A]') -> bool:
+    def __eq__(self, other: 'Try[A]') -> bool: # type: ignore
         return self.is_failure() == other.is_failure() and self.value == other.value
 
     def __str__(self) -> str:
@@ -195,7 +195,7 @@ class Success(Try[A]):
         self.value = value
         self.biased = True
 
-    def __eq__(self, other: 'Try[A]') -> bool:
+    def __eq__(self, other: 'Try[A]') -> bool: # type: ignore
         return self.is_success() == other.is_success() and self.value == other.value
 
 
