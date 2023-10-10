@@ -86,7 +86,7 @@ class Left(Either[A]):
     def left(self):
         return self.value
     
-    def __eq__(self, other: 'Either[A]') -> bool:
+    def __eq__(self, other: 'Either[A]') -> bool: # type: ignore
         return self.is_left() == other.is_left() and self.value == other.value
     
     def __str__(self) -> str:
@@ -104,7 +104,7 @@ class Right(Either[A]):
     def right(self):
         return self.value
     
-    def __eq__(self, other: Either[A]) -> bool:
+    def __eq__(self, other: 'Either[A]') -> bool: # type: ignore
         return self.is_right() == other.is_right() and self.value == other.value
     
     def __str__(self) -> str:
