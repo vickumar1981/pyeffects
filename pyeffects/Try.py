@@ -180,14 +180,8 @@ class Failure(Try[A]):
         self.value = value  # type: ignore
         self.biased = False
 
-    def __eq__(self, __value: object) -> bool:
-        isFailure = isinstance(__value, self.__class__)
-        if not isFailure:
-         return False
-        if self.value == __value.value:
-            return True
-        else:
-            return False 
+    def __eq__(self, other: 'Try[A]') -> bool:
+        return self.is_failure() == other.is_failure() and self.value == other.value
 
     def __str__(self) -> str:
         return 'Failure(' + str(self.value) + ')'
@@ -201,14 +195,9 @@ class Success(Try[A]):
         self.value = value
         self.biased = True
 
-    def __eq__(self, __value: object) -> bool:
-        isSuccess = isinstance(__value, self.__class__)
-        if not isSuccess:
-         return False
-        if self.value == __value.value:
-            return True
-        else:
-            return False 
+    def __eq__(self, other: 'Try[A]') -> bool:
+        return self.is_success() == other.is_success() and self.value == other.value
+
 
     def __str__(self) -> str:
         return 'Success(' + str(self.value) + ')'

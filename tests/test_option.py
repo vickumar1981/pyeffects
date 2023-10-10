@@ -45,5 +45,8 @@ class TestOption:
     def test_Some_equality(self):
         assert Some(5) == Some(5)
 
+    def test_Some_inequality(self):
+        assert Some(5) != Some(7)
+
     def test_empty_equality(self):
         assert Empty() == Empty()

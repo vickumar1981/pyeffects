@@ -99,7 +99,13 @@ class TestOption:
         assert str(Failure(random_int())).startswith("Failure")
 
     def test_failure_equality(self):
-        assert Failure( 5) == Failure(5)
+        assert Failure(5) == Failure(5)
+
+    def test_failure_inequality(self):
+        assert Failure(5) != Failure(6)
+
+    def test_success_inequality(self):
+        assert Success(6) != Success(5)
 
     def test_success_equality(self):
         assert Success(5) == Success(5)
