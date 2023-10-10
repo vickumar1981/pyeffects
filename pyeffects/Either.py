@@ -86,14 +86,8 @@ class Left(Either[A]):
     def left(self):
         return self.value
     
-    def __eq__(self, __value: object) -> bool:
-        isLeft = isinstance(__value, self.__class__)
-        if not isLeft:
-         return False
-        if self.value == __value.value:
-            return True
-        else:
-            return False 
+    def __eq__(self, other: 'Either[A]') -> bool:
+        return self.is_left() == other.is_left() and self.value == other.value
     
     def __str__(self) -> str:
         return 'Left(' + str(self.value) + ')'
@@ -110,14 +104,8 @@ class Right(Either[A]):
     def right(self):
         return self.value
     
-    def __eq__(self, __value: object) -> bool:
-        isRight = isinstance(__value, self.__class__)
-        if not isRight:
-         return False
-        if self.value == __value.value:
-            return True
-        else:
-            return False 
+    def __eq__(self, other: Either[A]) -> bool:
+        return self.is_right() == other.is_right() and self.value == other.value
     
     def __str__(self) -> str:
         return 'Right(' + str(self.value) + ')'

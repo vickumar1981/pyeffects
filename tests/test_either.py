@@ -65,6 +65,12 @@ class TestEither:
 
     def test_left_equality(self):
         assert Left(5) == Left(5)
+
+    def test_left_inequality(self):
+        assert Left(5) != Left(6)
     
     def test_right_equality(self):
         assert Right(5) == Right(5)
+
+    def test_right_inequality(self):
+        assert Right(6) != Right(5)
