@@ -9,13 +9,13 @@ This module implements the Option, Some, and Empty classes.
 from typing import Callable, TypeVar
 from .Monad import Monad
 
-A = TypeVar('A', covariant=True)
-B = TypeVar('B')
+A = TypeVar("A", covariant=True)
+B = TypeVar("B")
 
 
 class Option(Monad[A]):
     @staticmethod
-    def of(value: B) -> 'Option[B]':
+    def of(value: B) -> "Option[B]":
         """Constructs a :class:`Option <Option>`.
 
         :param value: value of the new :class:`Option` object.
@@ -33,7 +33,7 @@ class Option(Monad[A]):
         """
         return empty if value is None else Some(value)
 
-    def flat_map(self, func: Callable[[A], 'Monad[B]']) -> 'Monad[B]':
+    def flat_map(self, func: Callable[[A], "Monad[B]"]) -> "Monad[B]":
         """Flatmaps a function for :class:`Option <Option>`.
 
         :param func: function returning a pyEffects.Option to apply to flat_map.
@@ -84,12 +84,11 @@ class Some(Option[A]):
         self.value = value
         self.biased = True
 
-    def __eq__(self, other: 'Option[A]') -> bool: # type: ignore
+    def __eq__(self, other: "Option[A]") -> bool:  # type: ignore
         return self.is_defined() == other.is_defined() and self.value == other.value
 
-
     def __str__(self) -> str:
-        return 'Some(' + str(self.value) + ')'
+        return "Some(" + str(self.value) + ")"
 
     def __repr__(self) -> str:
         return self.__str__()
@@ -100,11 +99,11 @@ class Empty(Option[A]):
         self.value = None  # type: ignore
         self.biased = False
 
-    def __eq__(self, other: 'Option[A]') -> bool: # type: ignore
+    def __eq__(self, other: "Option[A]") -> bool:  # type: ignore
         return self.is_empty() == other.is_empty() and self.value == other.value
 
     def __str__(self) -> str:
-        return 'Empty()'
+        return "Empty()"
 
     def __repr__(self) -> str:
         return self.__str__()

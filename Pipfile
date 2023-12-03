@@ -8,7 +8,7 @@ alabaster = "*"
 codecov = "*"
 docutils = "*"
 detox = "*"
-flake8 = "*"
+black = "*"
 more-itertools = "<6.0"
 pytest = "*"
 pytest-mock = "*"
@@ -21,6 +21,7 @@ mypy = "*"
 typing_extensions = "*"
 
 [packages]
+black = "*"
 
 [requires]
 python_version = "3.8"

@@ -16,8 +16,8 @@ ci:
 test-readme:
 	@pipenv run python setup.py check --restructuredtext --strict && ([ $$? -eq 0 ] && echo "README.rst and HISTORY.rst ok") || echo "Invalid markup in README.rst or HISTORY.rst!"
 
-flake8:
-	pipenv run flake8 --ignore=E501,F401,E128,E402,E731,F821 pyeffects
+black:
+	pipenv run black --check pyeffects
 
 coverage:
 	pipenv run py.test --cov-config .coveragerc --verbose --cov-report term --cov-report xml --cov=pyeffects tests
