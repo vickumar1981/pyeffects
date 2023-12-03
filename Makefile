@@ -17,7 +17,7 @@ test-readme:
 	@pipenv run python setup.py check --restructuredtext --strict && ([ $$? -eq 0 ] && echo "README.rst and HISTORY.rst ok") || echo "Invalid markup in README.rst or HISTORY.rst!"
 
 black:
-	pipenv run black --check pyeffects
+	pipenv run black --check pyeffects tests
 
 coverage:
 	pipenv run py.test --cov-config .coveragerc --verbose --cov-report term --cov-report xml --cov=pyeffects tests

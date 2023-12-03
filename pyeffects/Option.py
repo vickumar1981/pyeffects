@@ -78,14 +78,19 @@ class Option(Monad[A]):
         """
         return not self.is_defined()
 
+    def __eq__(self, other: object) -> bool:
+        is_option_instance = isinstance(other, self.__class__)
+        return (
+            is_option_instance
+            and self.biased == other.biased  # type: ignore
+            and self.value == other.value  # type: ignore
+        )
+
 
 class Some(Option[A]):
     def __init__(self, value: A) -> None:
         self.value = value
         self.biased = True
-
-    def __eq__(self, other: "Option[A]") -> bool:  # type: ignore
-        return self.is_defined() == other.is_defined() and self.value == other.value
 
     def __str__(self) -> str:
         return "Some(" + str(self.value) + ")"
@@ -98,9 +103,6 @@ class Empty(Option[A]):
     def __init__(self) -> None:
         self.value = None  # type: ignore
         self.biased = False
-
-    def __eq__(self, other: "Option[A]") -> bool:  # type: ignore
-        return self.is_empty() == other.is_empty() and self.value == other.value
 
     def __str__(self) -> str:
         return "Empty()"

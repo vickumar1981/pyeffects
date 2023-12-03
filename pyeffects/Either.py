@@ -77,6 +77,14 @@ class Either(Monad[A]):
         """
         return not self.is_right()
 
+    def __eq__(self, other: object) -> bool:
+        is_either_instance = isinstance(other, self.__class__)
+        return (
+            is_either_instance
+            and self.biased == other.biased  # type: ignore
+            and self.value == other.value  # type: ignore
+        )
+
 
 class Left(Either[A]):
     def __init__(self, value: A) -> None:
@@ -85,9 +93,6 @@ class Left(Either[A]):
 
     def left(self):
         return self.value
-
-    def __eq__(self, other: "Either[A]") -> bool:  # type: ignore
-        return self.is_left() == other.is_left() and self.value == other.value
 
     def __str__(self) -> str:
         return "Left(" + str(self.value) + ")"
@@ -103,9 +108,6 @@ class Right(Either[A]):
 
     def right(self):
         return self.value
-
-    def __eq__(self, other: "Either[A]") -> bool:  # type: ignore
-        return self.is_right() == other.is_right() and self.value == other.value
 
     def __str__(self) -> str:
         return "Right(" + str(self.value) + ")"

@@ -30,7 +30,9 @@ class TestOption:
     def test_recovers_from_failed_try_depends_on_error(self):
         value = random_int()
         failed_try = Try.of(self._fail_try)
-        assert failed_try.recovers([RuntimeError, AssertionError], lambda: value).is_success()
+        assert failed_try.recovers(
+            [RuntimeError, AssertionError], lambda: value
+        ).is_success()
         assert failed_try.recovers([RuntimeError, AssertionError], value).is_success()
 
     def test_recover_from_failed_try_depends_on_error(self):
@@ -49,7 +51,9 @@ class TestOption:
 
     def test_try_associativity(self):
         value = random_int()
-        value1 = Try.of(value).flat_map(lambda v1: self._sq_int(v1).flat_map(lambda v2: self._dbl_int(v2)))
+        value1 = Try.of(value).flat_map(
+            lambda v1: self._sq_int(v1).flat_map(lambda v2: self._dbl_int(v2))
+        )
         value2 = Try.of(value).flat_map(self._sq_int).flat_map(self._dbl_int)
         assert value1.get() == value2.get()
 
@@ -80,14 +84,14 @@ class TestOption:
         xs = [1, 2, 3]
         Try.of(error).on_success(lambda _: xs.append(4))
         assert xs == [1, 2, 3]
-    
+
     def test_try_on_failure_done(self):
         def error():
-            raise RuntimeError('Error!')
+            raise RuntimeError("Error!")
 
         errors = []
         Try.of(error).on_failure(lambda e: errors.append(str(e)))
-        assert errors == ['Error!']
+        assert errors == ["Error!"]
 
     def test_try_on_failure_skipped(self):
         errors = []
@@ -99,13 +103,21 @@ class TestOption:
         assert str(Failure(random_int())).startswith("Failure")
 
     def test_failure_equality(self):
-        assert Failure(5) == Failure(5)
+        value = random_int()
+        assert Failure(value) == Failure(value)
 
     def test_failure_inequality(self):
-        assert Failure(5) != Failure(6)
+        value = random_int()
+        assert Failure(value) != Failure(value + 1)
 
     def test_success_inequality(self):
-        assert Success(6) != Success(5)
+        value = random_int()
+        assert Success(value) != Success(value + 1)
 
     def test_success_equality(self):
-        assert Success(5) == Success(5)
+        value = random_int()
+        assert Success(value) == Success(value)
+
+    def test_try_type_inequality(self):
+        value = random_int()
+        assert Success(value) != Failure(value)

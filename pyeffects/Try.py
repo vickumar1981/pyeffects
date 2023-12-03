@@ -178,14 +178,19 @@ class Try(Monad[A]):
         if self.is_failure():
             func(self.error())
 
+    def __eq__(self, other: object) -> bool:
+        is_try_instance = isinstance(other, self.__class__)
+        return (
+            is_try_instance
+            and self.biased == other.biased  # type: ignore
+            and self.value == other.value  # type: ignore
+        )
+
 
 class Failure(Try[A]):
     def __init__(self, value: Exception) -> None:
         self.value = value  # type: ignore
         self.biased = False
-
-    def __eq__(self, other: "Try[A]") -> bool:  # type: ignore
-        return self.is_failure() == other.is_failure() and self.value == other.value
 
     def __str__(self) -> str:
         return "Failure(" + str(self.value) + ")"
@@ -198,9 +203,6 @@ class Success(Try[A]):
     def __init__(self, value: A) -> None:
         self.value = value
         self.biased = True
-
-    def __eq__(self, other: "Try[A]") -> bool:  # type: ignore
-        return self.is_success() == other.is_success() and self.value == other.value
 
     def __str__(self) -> str:
         return "Success(" + str(self.value) + ")"

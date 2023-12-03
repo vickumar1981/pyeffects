@@ -34,7 +34,9 @@ class TestEither:
 
     def test_either_associativity(self):
         value = random_int()
-        value1 = Right(value).flat_map(lambda v1: self._sq_int(v1).flat_map(lambda v2: self._dbl_int(v2)))
+        value1 = Right(value).flat_map(
+            lambda v1: self._sq_int(v1).flat_map(lambda v2: self._dbl_int(v2))
+        )
         value2 = Right(value).flat_map(self._sq_int).flat_map(self._dbl_int)
         assert value1.get() == value2.get()
 
@@ -64,13 +66,21 @@ class TestEither:
         assert str(Left(random_int())).startswith("Left")
 
     def test_left_equality(self):
-        assert Left(5) == Left(5)
+        value = random_int()
+        assert Left(value) == Left(value)
 
     def test_left_inequality(self):
-        assert Left(5) != Left(6)
-    
+        value = random_int()
+        assert Left(value) != Left(value + 1)
+
     def test_right_equality(self):
-        assert Right(5) == Right(5)
+        value = random_int()
+        assert Right(value) == Right(value)
 
     def test_right_inequality(self):
-        assert Right(6) != Right(5)
+        value = random_int()
+        assert Right(value) != Right(value + 1)
+
+    def test_either_type_inequality(self):
+        value = random_int()
+        assert Right(value) != Left(value)
