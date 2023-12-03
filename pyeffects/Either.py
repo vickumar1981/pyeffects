@@ -9,13 +9,13 @@ This module implements the Either, Left, and Right classes.
 from typing import Callable, TypeVar
 from .Monad import Monad
 
-A = TypeVar('A', covariant=True)
-B = TypeVar('B')
+A = TypeVar("A", covariant=True)
+B = TypeVar("B")
 
 
 class Either(Monad[A]):
     @staticmethod
-    def of(value: B) -> 'Either[B]':
+    def of(value: B) -> "Either[B]":
         """Constructs a :class:`Either <Either>`.
 
         :param value: value of the new :class:`Either` object.
@@ -33,7 +33,7 @@ class Either(Monad[A]):
         """
         return Right(value)
 
-    def flat_map(self, func: Callable[[A], 'Monad[B]']) -> 'Monad[B]':
+    def flat_map(self, func: Callable[[A], "Monad[B]"]) -> "Monad[B]":
         """Flatmaps a function for :class:`Either <Either>`.
 
         :param func: function returning a pyEffects.Either to apply to flat_map.
@@ -77,6 +77,14 @@ class Either(Monad[A]):
         """
         return not self.is_right()
 
+    def __eq__(self, other: object) -> bool:
+        is_either_instance = isinstance(other, self.__class__)
+        return (
+            is_either_instance
+            and self.biased == other.biased  # type: ignore
+            and self.value == other.value  # type: ignore
+        )
+
 
 class Left(Either[A]):
     def __init__(self, value: A) -> None:
@@ -87,7 +95,7 @@ class Left(Either[A]):
         return self.value
 
     def __str__(self) -> str:
-        return 'Left(' + str(self.value) + ')'
+        return "Left(" + str(self.value) + ")"
 
     def __repr__(self) -> str:
         return self.__str__()
@@ -100,9 +108,9 @@ class Right(Either[A]):
 
     def right(self):
         return self.value
-    
+
     def __str__(self) -> str:
-        return 'Right(' + str(self.value) + ')'
+        return "Right(" + str(self.value) + ")"
 
     def __repr__(self) -> str:
         return self.__str__()

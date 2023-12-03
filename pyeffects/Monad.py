@@ -1,7 +1,7 @@
 from typing import Callable, Generic, TypeVar
 
-A = TypeVar('A', covariant=True)
-B = TypeVar('B')
+A = TypeVar("A", covariant=True)
+B = TypeVar("B")
 
 
 class Monad(Generic[A]):
@@ -9,18 +9,19 @@ class Monad(Generic[A]):
     biased: bool
 
     @staticmethod
-    def of(x: B) -> 'Monad[B]':
+    def of(x: B) -> "Monad[B]":
         raise NotImplementedError("of method needs to be implemented")
 
-    def flat_map(self, f: Callable[[A], 'Monad[B]']) -> 'Monad[B]':
+    def flat_map(self, f: Callable[[A], "Monad[B]"]) -> "Monad[B]":
         raise NotImplementedError("flat_map method needs to be implemented")
 
-    def map(self, func: Callable[[A], B]) -> 'Monad[B]':
+    def map(self, func: Callable[[A], B]) -> "Monad[B]":
         if not hasattr(func, "__call__"):
             raise TypeError("map expects a callable")
 
-        def wrapped(x: A) -> 'Monad[B]':  # type: ignore
+        def wrapped(x: A) -> "Monad[B]":  # type: ignore
             return self.of(func(x))
+
         return self.flat_map(wrapped)
 
     def foreach(self, func: Callable[[A], B]) -> None:
@@ -47,7 +48,7 @@ class Monad(Generic[A]):
         else:
             return func()
 
-    def or_else(self, other: 'Monad[A]') -> 'Monad[A]':
+    def or_else(self, other: "Monad[A]") -> "Monad[A]":
         if not isinstance(other, Monad):
             raise TypeError("or_else can only be chained with other Monad classes")
         if self.biased:

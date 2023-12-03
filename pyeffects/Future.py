@@ -13,8 +13,8 @@ from .Try import Success, Failure, Try
 from functools import reduce
 import threading
 
-A = TypeVar('A', covariant=True)
-B = TypeVar('B')
+A = TypeVar("A", covariant=True)
+B = TypeVar("B")
 
 
 class Future(Monad[A]):
@@ -29,7 +29,7 @@ class Future(Monad[A]):
         func(self._callback)
 
     @staticmethod
-    def of(value: B) -> 'Future[B]':
+    def of(value: B) -> "Future[B]":
         """Constructs an immediate :class:`Future <Future>`.
 
         :param value: value of the new :class:`Future` object.
@@ -59,7 +59,7 @@ class Future(Monad[A]):
         thread.start()
 
     @staticmethod
-    def run(func: Callable[[], A]) -> 'Future[A]':
+    def run(func: Callable[[], A]) -> "Future[A]":
         """Constructs a :class:`Future <Future>` that runs asynchronously on another thread.
 
         :param func: function to run on new thread and return a new :class:`Future` object
@@ -88,7 +88,7 @@ class Future(Monad[A]):
         if self.is_failure():
             return self.value.error()  # type: ignore
 
-    def flat_map(self, func: Callable[[A], 'Monad[B]']) -> 'Monad[B]':
+    def flat_map(self, func: Callable[[A], "Monad[B]"]) -> "Monad[B]":
         """Flatmaps a function for :class:`Future <Future>`.
 
         :param func: function returning a pyEffects.Future to apply to flat_map.
@@ -112,10 +112,11 @@ class Future(Monad[A]):
     def traverse(arr):
         return reduce(
             lambda acc, elem: acc.flat_map(
-                lambda values: elem.map(
-                    lambda value: values + [value]
-                )
-            ), arr, Future.of([]))
+                lambda values: elem.map(lambda value: values + [value])
+            ),
+            arr,
+            Future.of([]),
+        )
 
     def _callback(self, value: Try[A]) -> None:
         self.value = value  # type: ignore
@@ -253,7 +254,7 @@ class Future(Monad[A]):
         self.semaphore.release()
 
     def __str__(self) -> str:
-        return 'Future(' + str(self.value) + ')' 
+        return "Future(" + str(self.value) + ")"
 
     def __repr__(self) -> str:
         return self.__str__()

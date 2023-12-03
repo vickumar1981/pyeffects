@@ -23,11 +23,15 @@ class TestOption:
 
     def test_option_left_identity(self):
         value = random_int()
-        assert Option.of(value).flat_map(self._sq_int).get() == self._sq_int(value).get()
+        assert (
+            Option.of(value).flat_map(self._sq_int).get() == self._sq_int(value).get()
+        )
 
     def test_option_associativity(self):
         value = random_int()
-        value1 = Option.of(value).flat_map(lambda v1: self._sq_int(v1).flat_map(lambda v2: self._dbl_int(v2)))
+        value1 = Option.of(value).flat_map(
+            lambda v1: self._sq_int(v1).flat_map(lambda v2: self._dbl_int(v2))
+        )
         value2 = Option.of(value).flat_map(self._sq_int).flat_map(self._dbl_int)
         assert value1.get() == value2.get()
 
@@ -41,3 +45,17 @@ class TestOption:
     def test_option_repr(self):
         assert str(Some(random_int())).startswith("Some")
         assert str(empty).startswith("Empty")
+
+    def test_some_equality(self):
+        value = random_int()
+        assert Some(value) == Some(value)
+
+    def test_some_inequality(self):
+        value = random_int()
+        assert Some(value) != Some(value + 1)
+
+    def test_empty_equality(self):
+        assert Empty() == Empty()
+
+    def test_option_type_inequality(self):
+        assert Some(random_int()) != Empty()
